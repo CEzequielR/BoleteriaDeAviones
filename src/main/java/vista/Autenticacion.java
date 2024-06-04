@@ -4,6 +4,7 @@
  */
 package vista;
 
+import java.awt.Color;
 import javax.swing.JFrame;
 
 /**
@@ -49,6 +50,7 @@ public class Autenticacion extends javax.swing.JFrame {
         label2 = new java.awt.Label();
         txtContraseñaSesionIniciada = new javax.swing.JTextField();
         btnInicio = new javax.swing.JButton();
+        labelOlvidasteContraseña = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1860, 1000));
@@ -189,6 +191,22 @@ public class Autenticacion extends javax.swing.JFrame {
             }
         });
 
+        labelOlvidasteContraseña.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
+        labelOlvidasteContraseña.setForeground(new java.awt.Color(0, 0, 0));
+        labelOlvidasteContraseña.setText("¿Olvidaste la contraseña?");
+        labelOlvidasteContraseña.setToolTipText("");
+        labelOlvidasteContraseña.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelOlvidasteContraseñaMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                labelOlvidasteContraseñaMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                labelOlvidasteContraseñaMouseExited(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -205,7 +223,8 @@ public class Autenticacion extends javax.swing.JFrame {
                             .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtEmailSesionIniciada, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(237, 237, 237)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labelOlvidasteContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -226,7 +245,9 @@ public class Autenticacion extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(124, 124, 124)
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 201, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(labelOlvidasteContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 167, Short.MAX_VALUE)
                 .addComponent(btnInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(54, 54, 54))
         );
@@ -288,6 +309,23 @@ public class Autenticacion extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtEmailSesionIniciadaActionPerformed
 
+    private void labelOlvidasteContraseñaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelOlvidasteContraseñaMouseClicked
+        // TODO add your handling code here:
+        OlvidarContraseña olv1 = new OlvidarContraseña(this, rootPaneCheckingEnabled);
+        olv1.setVisible(true);
+        olv1.setLocationRelativeTo(null);
+    }//GEN-LAST:event_labelOlvidasteContraseñaMouseClicked
+
+    private void labelOlvidasteContraseñaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelOlvidasteContraseñaMouseEntered
+        // TODO add your handling code here:
+                labelOlvidasteContraseña.setForeground(Color.blue);
+    }//GEN-LAST:event_labelOlvidasteContraseñaMouseEntered
+
+    private void labelOlvidasteContraseñaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelOlvidasteContraseñaMouseExited
+        // TODO add your handling code here:
+        labelOlvidasteContraseña.setForeground(Color.black);
+    }//GEN-LAST:event_labelOlvidasteContraseñaMouseExited
+
     /**
      * @param args the command line arguments
      */
@@ -339,6 +377,7 @@ public class Autenticacion extends javax.swing.JFrame {
     private java.awt.Label label4;
     private java.awt.Label label5;
     private java.awt.Label label6;
+    private javax.swing.JLabel labelOlvidasteContraseña;
     private javax.swing.JTextField txtApellidoRegistro;
     private javax.swing.JTextField txtContraseñaRegistro;
     private javax.swing.JTextField txtContraseñaSesionIniciada;
