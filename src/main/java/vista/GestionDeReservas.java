@@ -1,20 +1,19 @@
-package vista;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+package vista;
 
 /**
  *
- * @author Lenovo
+ * @author Monica Valenzuela
  */
-public class BusquedaDeVuelos extends javax.swing.JFrame {
+public class GestionDeReservas extends javax.swing.JFrame {
 
     /**
-     * Creates new form BusquedaDeVuelos
+     * Creates new form GestionDeReservas
      */
-    public BusquedaDeVuelos() {
+    public GestionDeReservas() {
         initComponents();
     }
 
@@ -27,31 +26,35 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnvolver = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        btnvolvergestion = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1851, 894));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnvolver.setText("VOLVER");
-        btnvolver.addActionListener(new java.awt.event.ActionListener() {
+        jPanel1.setPreferredSize(new java.awt.Dimension(1851, 894));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btnvolvergestion.setText("VOLVER");
+        btnvolvergestion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnvolverActionPerformed(evt);
+                btnvolvergestionActionPerformed(evt);
             }
         });
-        getContentPane().add(btnvolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(412, 201, -1, -1));
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1440, 790));
+        jPanel1.add(btnvolvergestion, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 110, 114, 39));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1440, 790));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1851, 894));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnvolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvolverActionPerformed
-        // TODO add your handling code here:
+    private void btnvolvergestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvolvergestionActionPerformed
         dispose();
         SesionIniciada si = new SesionIniciada();
         si.setVisible(true);
-    }//GEN-LAST:event_btnvolverActionPerformed
+    }//GEN-LAST:event_btnvolvergestionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,26 +73,27 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BusquedaDeVuelos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionDeReservas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BusquedaDeVuelos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionDeReservas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BusquedaDeVuelos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionDeReservas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BusquedaDeVuelos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionDeReservas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BusquedaDeVuelos().setVisible(true);
+                new GestionDeReservas().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnvolver;
+    private javax.swing.JButton btnvolvergestion;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

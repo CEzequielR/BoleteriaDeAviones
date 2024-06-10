@@ -1,20 +1,19 @@
-package vista;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+package vista;
 
 /**
  *
- * @author Lenovo
+ * @author Monica Valenzuela
  */
-public class BusquedaDeVuelos extends javax.swing.JFrame {
+public class CompraDePasajes extends javax.swing.JFrame {
 
     /**
-     * Creates new form BusquedaDeVuelos
+     * Creates new form CompraDePasajes
      */
-    public BusquedaDeVuelos() {
+    public CompraDePasajes() {
         initComponents();
     }
 
@@ -27,31 +26,30 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnvolver = new javax.swing.JButton();
+        btnvolvercompra = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1851, 894));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnvolver.setText("VOLVER");
-        btnvolver.addActionListener(new java.awt.event.ActionListener() {
+        btnvolvercompra.setText("VOLVER");
+        btnvolvercompra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnvolverActionPerformed(evt);
+                btnvolvercompraActionPerformed(evt);
             }
         });
-        getContentPane().add(btnvolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(412, 201, -1, -1));
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1440, 790));
+        getContentPane().add(btnvolvercompra, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 170, 80, 30));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(301, 154, 1550, 740));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnvolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvolverActionPerformed
+    private void btnvolvercompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvolvercompraActionPerformed
         // TODO add your handling code here:
         dispose();
         SesionIniciada si = new SesionIniciada();
         si.setVisible(true);
-    }//GEN-LAST:event_btnvolverActionPerformed
+    }//GEN-LAST:event_btnvolvercompraActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,26 +68,26 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BusquedaDeVuelos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CompraDePasajes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BusquedaDeVuelos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CompraDePasajes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BusquedaDeVuelos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CompraDePasajes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BusquedaDeVuelos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CompraDePasajes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BusquedaDeVuelos().setVisible(true);
+                new CompraDePasajes().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnvolver;
+    private javax.swing.JButton btnvolvercompra;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
