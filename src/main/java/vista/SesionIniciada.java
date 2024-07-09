@@ -28,8 +28,15 @@ public class SesionIniciada extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         btnInicio = new javax.swing.JButton();
+        busquedaVuelos = new javax.swing.JButton();
+        reservaPasajes = new javax.swing.JButton();
+        compraPasajes = new javax.swing.JButton();
+        gestionReservas = new javax.swing.JButton();
+        informacionVuelos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnInicio.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 24)); // NOI18N
         btnInicio.setText("Volver al Inicio");
@@ -39,39 +46,57 @@ public class SesionIniciada extends javax.swing.JFrame {
                 btnInicioActionPerformed(evt);
             }
         });
+        jPanel1.add(btnInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 760, 228, 33));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(525, Short.MAX_VALUE)
-                .addComponent(btnInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(284, 284, 284))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(516, Short.MAX_VALUE)
-                .addComponent(btnInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(124, 124, 124))
-        );
+        busquedaVuelos.setText("BÚSQUEDA DE VUELOS");
+        busquedaVuelos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                busquedaVuelosActionPerformed(evt);
+            }
+        });
+        jPanel1.add(busquedaVuelos, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 40, 180, 30));
+
+        reservaPasajes.setText("RESERVA DE PASAJES");
+        reservaPasajes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reservaPasajesActionPerformed(evt);
+            }
+        });
+        jPanel1.add(reservaPasajes, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 90, 180, 30));
+
+        compraPasajes.setText("COMPRA DE PASAJES");
+        compraPasajes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                compraPasajesActionPerformed(evt);
+            }
+        });
+        jPanel1.add(compraPasajes, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 140, 180, 30));
+
+        gestionReservas.setText("GESTIÓN DE RESERVAS");
+        gestionReservas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gestionReservasActionPerformed(evt);
+            }
+        });
+        jPanel1.add(gestionReservas, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 190, 180, 30));
+
+        informacionVuelos.setText("INFORMACIÓN DE VUELOS");
+        informacionVuelos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                informacionVuelosActionPerformed(evt);
+            }
+        });
+        jPanel1.add(informacionVuelos, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 240, 180, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1094, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(138, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE)
         );
 
         pack();
@@ -82,6 +107,36 @@ public class SesionIniciada extends javax.swing.JFrame {
         Autenticacion aute1 = new Autenticacion();
         aute1.setVisible(true);
     }//GEN-LAST:event_btnInicioActionPerformed
+
+    private void reservaPasajesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reservaPasajesActionPerformed
+        dispose();
+        ReservaDePasajes rp = new ReservaDePasajes();
+        rp.setVisible(true);
+    }//GEN-LAST:event_reservaPasajesActionPerformed
+
+    private void busquedaVuelosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busquedaVuelosActionPerformed
+        dispose();
+        BusquedaDeVuelos bdv = new BusquedaDeVuelos();
+        bdv.setVisible(true);
+    }//GEN-LAST:event_busquedaVuelosActionPerformed
+
+    private void compraPasajesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compraPasajesActionPerformed
+        dispose();
+        CompraDePasajes cdp = new CompraDePasajes();
+        cdp.setVisible(true);
+    }//GEN-LAST:event_compraPasajesActionPerformed
+
+    private void gestionReservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gestionReservasActionPerformed
+        dispose();
+        GestionDeReservas gdr = new GestionDeReservas();
+        gdr.setVisible(true);
+    }//GEN-LAST:event_gestionReservasActionPerformed
+
+    private void informacionVuelosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_informacionVuelosActionPerformed
+        dispose();
+        InformacionDeVuelos idv = new InformacionDeVuelos();
+        idv.setVisible(true);
+    }//GEN-LAST:event_informacionVuelosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -120,6 +175,11 @@ public class SesionIniciada extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInicio;
+    private javax.swing.JButton busquedaVuelos;
+    private javax.swing.JButton compraPasajes;
+    private javax.swing.JButton gestionReservas;
+    private javax.swing.JButton informacionVuelos;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton reservaPasajes;
     // End of variables declaration//GEN-END:variables
 }

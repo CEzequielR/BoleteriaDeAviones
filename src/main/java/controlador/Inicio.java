@@ -13,6 +13,5 @@ public class Inicio {
         aute1.setLocationRelativeTo(null);
         aute1.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
-        
     }
 }
