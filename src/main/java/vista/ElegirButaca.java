@@ -64,7 +64,7 @@ public class ElegirButaca extends javax.swing.JFrame {
                         .addGap(536, 536, 536)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(482, 482, 482)
+                        .addGap(476, 476, 476)
                         .addComponent(jLabel1)))
                 .addGap(934, 934, 934))
         );

@@ -11,6 +11,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalTime;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Random;
+import javax.crypto.AEADBadTagException;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
@@ -35,15 +40,15 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
         model.addColumn("Destino");
         model.addColumn("Horario");
         model.addColumn("Estado");
-
-        vuelosConsulta();
+        model.addColumn("Fecha");
+        consultaTodos();
         iniciarTimer();
 
     }
 
-    private void vuelosConsulta() {
-
-        String query = "SELECT IDvuelo, Salida, Destino, Horario, Estado FROM vuelos";
+    private void consultaTodos() {
+        
+        String query = "SELECT IDvuelo, Salida, Destino, Horario, Estado, Fecha FROM vuelos";
 
         try (Connection conn = new Conexion().estableceConexion(); PreparedStatement stmt = conn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
 
@@ -54,9 +59,33 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
                 String ciudadSalida = rs.getString("Salida");
                 String ciudadDestino = rs.getString("Destino");
                 LocalTime horario = rs.getTime("Horario").toLocalTime();
-                String estado = determinarEstado(horario);
+                Date fecha = rs.getDate("Fecha");                
+                String estado = determinarEstado(horario, fecha);
+                Object[] vuelo = {idVuelo, ciudadSalida, ciudadDestino, horario, estado, fecha};
+                model.addRow(vuelo);
+            }
 
-                Object[] vuelo = {idVuelo, ciudadSalida, ciudadDestino, horario, estado};
+        } catch (SQLException e) {
+            System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+        }
+    }
+    private void vuelosDeHoy() {
+
+        String query = "SELECT * FROM vuelos\n" +
+"WHERE DATE(Fecha) = CURDATE();";
+
+        try (Connection conn = new Conexion().estableceConexion(); PreparedStatement stmt = conn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+
+            model.setRowCount(0);
+
+            while (rs.next()) {
+                String idVuelo = rs.getString("IDvuelo");
+                String ciudadSalida = rs.getString("Salida");
+                String ciudadDestino = rs.getString("Destino");
+                LocalTime horario = rs.getTime("Horario").toLocalTime();
+                Date fecha = rs.getDate("Fecha");
+                String estado = determinarEstado(horario, fecha);
+                Object[] vuelo = {idVuelo, ciudadSalida, ciudadDestino, horario, estado, fecha};
                 model.addRow(vuelo);
             }
 
@@ -65,27 +94,53 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
         }
     }
 
-    private String generarIDVuelo() {
-        return "Vuelo-" + (model.getRowCount() + 1);
-    }
+private void vuelosDiferidos() {
 
-    private String determinarEstado(LocalTime horaVuelo) {
-        LocalTime horaActual = LocalTime.now();
-        LocalTime horaLimite = horaVuelo.plusHours(1);
+        String query = "SELECT * FROM vuelos\n" +
+"WHERE DATE(Fecha) != CURDATE();";
 
-        if (horaActual.isAfter(horaLimite)) {
-            return "Cancelado";
-        } else if (horaActual.isAfter(horaVuelo)) {
-            return "Retrasado";
-        } else {
-            return "A tiempo";
+        try (Connection conn = new Conexion().estableceConexion(); PreparedStatement stmt = conn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+
+            model.setRowCount(0);
+
+            while (rs.next()) {
+                String idVuelo = rs.getString("IDvuelo");
+                String ciudadSalida = rs.getString("Salida");
+                String ciudadDestino = rs.getString("Destino");
+                LocalTime horario = rs.getTime("Horario").toLocalTime();
+                Date fecha = rs.getDate("Fecha");
+                String estado = determinarEstado(horario, fecha);
+                Object[] vuelo = {idVuelo, ciudadSalida, ciudadDestino, horario, estado, fecha};
+                model.addRow(vuelo);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al ejecutar la consulta: " + e.getMessage());
         }
     }
+
+private String determinarEstado(LocalTime horario, Date fecha) {
+    LocalTime horaActual = LocalTime.now();
+    LocalDate fechaActual = LocalDate.now();
+
+    // Comparar la fecha y la hora actual con las del vuelo
+    if (fecha.toLocalDate().isBefore(fechaActual)) {
+        return "Aterrizado";
+    } else if (fecha.toLocalDate().isEqual(fechaActual) && horario.isBefore(horaActual)) {
+        return "Aterrizado";
+    } else if (fecha.toLocalDate().isEqual(fechaActual) && horario.equals(horaActual)) {
+        return "En tiempo";
+    } else if (fecha.toLocalDate().isEqual(fechaActual) && horario.isAfter(horaActual)) {
+        return "Retrasado";
+    } else {
+        return "Programado";
+    }
+}
 
     private void iniciarTimer() {
         int delay = 60000; // Intervalo de actualización en milisegundos (ejemplo: cada 60 segundos)
         ActionListener listener = (ActionEvent e) -> {
-            vuelosConsulta(); // Actualizar datos cada vez que se ejecute el temporizador
+        consultaTodos(); // Actualizar datos cada vez que se ejecute el temporizador
         };
         timer = new Timer(delay, listener);
         timer.start();
@@ -104,8 +159,9 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
-        vuelosactuales = new javax.swing.JButton();
-        vuelosproximos = new javax.swing.JButton();
+        btnTodosLosVuelos = new javax.swing.JButton();
+        btnVuelosDiferidos = new javax.swing.JButton();
+        btnVuelosDelDia = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -116,7 +172,7 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
                 inicioActionPerformed(evt);
             }
         });
-        getContentPane().add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 600, 220, 40));
+        getContentPane().add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 600, 700, 40));
 
         jLabel1.setText("HORARIOS Y ESTADOS DE TODOS LOS VUELOS");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 320, 50));
@@ -134,23 +190,31 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tabla);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 120, 640, 410));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 950, 400));
 
-        vuelosactuales.setText("MOSTRAR VUELOS ACTUALES ");
-        vuelosactuales.addActionListener(new java.awt.event.ActionListener() {
+        btnTodosLosVuelos.setText("MOSTRAR TODOS LOS VUELOS");
+        btnTodosLosVuelos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                vuelosactualesActionPerformed(evt);
+                btnTodosLosVuelosActionPerformed(evt);
             }
         });
-        getContentPane().add(vuelosactuales, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 570, -1, -1));
+        getContentPane().add(btnTodosLosVuelos, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 540, 210, -1));
 
-        vuelosproximos.setText("MOSTRAR VUELOS PRÓXIMOS");
-        vuelosproximos.addActionListener(new java.awt.event.ActionListener() {
+        btnVuelosDiferidos.setText("MOSTRAR VUELOS DIFERIDOS");
+        btnVuelosDiferidos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                vuelosproximosActionPerformed(evt);
+                btnVuelosDiferidosActionPerformed(evt);
             }
         });
-        getContentPane().add(vuelosproximos, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 600, -1, -1));
+        getContentPane().add(btnVuelosDiferidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 540, 210, -1));
+
+        btnVuelosDelDia.setText("MOSTRAR VUELOS DEL DÍA");
+        btnVuelosDelDia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVuelosDelDiaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnVuelosDelDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 540, 210, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -161,17 +225,19 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
         si.setVisible(true);
     }//GEN-LAST:event_inicioActionPerformed
 
-    private void vuelosactualesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vuelosactualesActionPerformed
-        dispose();
-        MostrarVuelosActuales mva = new MostrarVuelosActuales();
-        mva.setVisible(true);
-    }//GEN-LAST:event_vuelosactualesActionPerformed
+    private void btnTodosLosVuelosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTodosLosVuelosActionPerformed
+        consultaTodos();
+      
+    }//GEN-LAST:event_btnTodosLosVuelosActionPerformed
 
-    private void vuelosproximosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vuelosproximosActionPerformed
-        dispose();
-        MostrarVuelosProximos mvp = new MostrarVuelosProximos();
-        mvp.setVisible(true);
-    }//GEN-LAST:event_vuelosproximosActionPerformed
+    private void btnVuelosDiferidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVuelosDiferidosActionPerformed
+        vuelosDiferidos();
+    }//GEN-LAST:event_btnVuelosDiferidosActionPerformed
+
+    private void btnVuelosDelDiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVuelosDelDiaActionPerformed
+        // TODO add your handling code here:
+        vuelosDeHoy();
+    }//GEN-LAST:event_btnVuelosDelDiaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -209,11 +275,12 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnTodosLosVuelos;
+    private javax.swing.JButton btnVuelosDelDia;
+    private javax.swing.JButton btnVuelosDiferidos;
     private javax.swing.JButton inicio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabla;
-    private javax.swing.JButton vuelosactuales;
-    private javax.swing.JButton vuelosproximos;
     // End of variables declaration//GEN-END:variables
 }
