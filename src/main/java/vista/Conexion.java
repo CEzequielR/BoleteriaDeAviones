@@ -14,8 +14,8 @@ public class Conexion {
     Connection conectar = null;
     
     String usuario = "root";
-    String contrasenia = "admin";
-    String bd = "final";
+    String contrasenia = "root";
+    String bd = "vuelos";
     String ip = "localhost";
     String puerto = "3306";
     String cadena = "jdbc:mysql://"+ip+":"+puerto+"/"+bd;
