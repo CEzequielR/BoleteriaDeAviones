@@ -4,6 +4,8 @@
  */
 package vista;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author Lenovo
@@ -105,24 +107,29 @@ public class SesionIniciada extends javax.swing.JFrame {
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
         dispose();
         Autenticacion aute1 = new Autenticacion();
+        aute1.setExtendedState(JFrame.MAXIMIZED_BOTH);
         aute1.setVisible(true);
     }//GEN-LAST:event_btnInicioActionPerformed
 
     private void reservaPasajesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reservaPasajesActionPerformed
         dispose();
         ReservaDePasajes rp = new ReservaDePasajes();
+        rp.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         rp.setVisible(true);
     }//GEN-LAST:event_reservaPasajesActionPerformed
 
     private void busquedaVuelosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busquedaVuelosActionPerformed
         dispose();
         BusquedaDeVuelos bdv = new BusquedaDeVuelos();
+        bdv.setExtendedState(JFrame.MAXIMIZED_BOTH);
         bdv.setVisible(true);
     }//GEN-LAST:event_busquedaVuelosActionPerformed
 
     private void compraPasajesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compraPasajesActionPerformed
         dispose();
         CompraDePasajes cdp = new CompraDePasajes();
+        cdp.setExtendedState(JFrame.MAXIMIZED_BOTH);
         cdp.setVisible(true);
     }//GEN-LAST:event_compraPasajesActionPerformed
 
@@ -135,6 +142,7 @@ public class SesionIniciada extends javax.swing.JFrame {
     private void informacionVuelosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_informacionVuelosActionPerformed
         dispose();
         InformacionDeVuelos idv = new InformacionDeVuelos();
+        idv.setExtendedState(JFrame.MAXIMIZED_BOTH);
         idv.setVisible(true);
     }//GEN-LAST:event_informacionVuelosActionPerformed
 

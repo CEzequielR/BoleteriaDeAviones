@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -279,6 +280,8 @@ public class Autenticacion extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
             SesionIniciada si = new SesionIniciada();
             si.setVisible(true);
+                        si.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         } else {
             JOptionPane.showMessageDialog(null, "Correo o contraseña incorrectos");
         }
@@ -433,8 +436,10 @@ public class Autenticacion extends javax.swing.JFrame {
 
         if (registrarUsuario(nombre, apellido, correo, contrasenia)) {
             JOptionPane.showMessageDialog(null, "Usuario registrado correctamente");
+            
             SesionIniciada si = new SesionIniciada();
             si.setVisible(true);
+
         } else {
             JOptionPane.showMessageDialog(null, "Error al registrar usuario");
         }
