@@ -93,7 +93,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnVuelosDiferidos">
       <Properties>
-        <Property name="text" type="java.lang.String" value="MOSTRAR VUELOS PROGRAMADOS"/>
+        <Property name="text" type="java.lang.String" value="VUELOS DE LOS PR&#xd3;XIMOS D&#xcd;AS"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVuelosDiferidosActionPerformed"/>
@@ -106,7 +106,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnVuelosDelDia">
       <Properties>
-        <Property name="text" type="java.lang.String" value="MOSTRAR VUELOS DEL D&#xcd;A"/>
+        <Property name="text" type="java.lang.String" value="VUELOS DEL D&#xcd;A"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVuelosDelDiaActionPerformed"/>

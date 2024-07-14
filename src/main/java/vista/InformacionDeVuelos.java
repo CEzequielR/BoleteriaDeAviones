@@ -78,14 +78,13 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
 
     private void vuelosDeHoy() {
 
-        String query = "SELECT * FROM vuelos\n"
-                + "WHERE DATE(Fecha) = CURDATE();";
+        String query = "SELECT vuelos.Salida, vuelos.Destino, vuelos.HorarioSalida, vuelos.Estado, vuelos.Fecha, vuelos.HorarioLlegada, vuelos.FechaLlegada, avion.Aerolinea FROM vuelos JOIN avion ON vuelos.Id_avion_vuelos = avion.id WHERE DATE(Fecha) = CURDATE();";
 
         try (Connection conn = new Conexion().estableceConexion(); PreparedStatement stmt = conn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
 
             model.setRowCount(0);
 
-             while (rs.next()) {
+            while (rs.next()) {
                 String ciudadSalida = rs.getString("Salida");
                 String ciudadDestino = rs.getString("Destino");
                 LocalTime horarioSalida = rs.getTime("HorarioSalida").toLocalTime();
@@ -106,8 +105,7 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
 
     private void vuelosDiferidos() {
 
-        String query = "SELECT * FROM vuelos\n"
-                + "WHERE DATE(Fecha) != CURDATE();";
+        String query = "SELECT vuelos.Salida, vuelos.Destino, vuelos.HorarioSalida, vuelos.Estado, vuelos.Fecha, vuelos.HorarioLlegada, vuelos.FechaLlegada, avion.Aerolinea FROM vuelos JOIN avion ON vuelos.Id_avion_vuelos = avion.id WHERE DATE(Fecha) > CURDATE();";
 
         try (Connection conn = new Conexion().estableceConexion(); PreparedStatement stmt = conn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
 
@@ -212,7 +210,7 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
         });
         getContentPane().add(btnTodosLosVuelos, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 540, 240, -1));
 
-        btnVuelosDiferidos.setText("MOSTRAR VUELOS PROGRAMADOS");
+        btnVuelosDiferidos.setText("VUELOS DE LOS PRÓXIMOS DÍAS");
         btnVuelosDiferidos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVuelosDiferidosActionPerformed(evt);
@@ -220,7 +218,7 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
         });
         getContentPane().add(btnVuelosDiferidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 540, 240, -1));
 
-        btnVuelosDelDia.setText("MOSTRAR VUELOS DEL DÍA");
+        btnVuelosDelDia.setText("VUELOS DEL DÍA");
         btnVuelosDelDia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVuelosDelDiaActionPerformed(evt);

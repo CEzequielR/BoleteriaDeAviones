@@ -1,21 +1,104 @@
 package vista;
 
+import com.toedter.calendar.JDateChooser;
+import java.sql.Connection;
+import java.util.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import javax.swing.JOptionPane;
+
+import javax.swing.table.DefaultTableModel;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author Lenovo
  */
 public class BusquedaDeVuelos extends javax.swing.JFrame {
 
-    /**
-     * Creates new form BusquedaDeVuelos
-     */
+    private final DefaultTableModel model;
+
     public BusquedaDeVuelos() {
         initComponents();
+        model = new DefaultTableModel();
+        tablaInfo.setModel(model);
+
+        model.addColumn("Salida");
+        model.addColumn("H. Salida");
+        model.addColumn("Fecha");
+        model.addColumn("Destino");
+        model.addColumn("H. Llegada");
+        model.addColumn("Fecha Llegada");
+        model.addColumn("Aerolínea");
+
+        consultaTodos();
+    }
+
+    private void consultaTodos() {
+        String query = "SELECT vuelos.Salida, vuelos.Destino, vuelos.HorarioSalida, vuelos.Estado, vuelos.Fecha, vuelos.HorarioLlegada, vuelos.FechaLlegada, avion.Aerolinea FROM vuelos JOIN avion ON vuelos.Id_avion_vuelos = avion.id WHERE DATE(Fecha) > CURDATE();";
+
+        try (Connection conn = new Conexion().estableceConexion(); PreparedStatement stmt = conn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+
+            model.setRowCount(0);
+
+            while (rs.next()) {
+                String ciudadSalida = rs.getString("Salida");
+                String ciudadDestino = rs.getString("Destino");
+                LocalTime horarioSalida = rs.getTime("HorarioSalida").toLocalTime();
+                Date fecha = rs.getDate("Fecha");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String fechaString = dateFormat.format(fecha);
+                LocalTime horarioLlegada = rs.getTime("HorarioLlegada").toLocalTime();
+                Date fechaLlegada = rs.getDate("FechaLlegada");
+                String aerolinea = rs.getString("Aerolinea");
+                Object[] vuelo = {ciudadSalida, horarioSalida, fechaString, ciudadDestino, horarioLlegada, fechaLlegada, aerolinea};
+                model.addRow(vuelo);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+        }
+    }
+
+    private void vueloConFecha() {
+               Date selectedDate = choseerFecha.getDate();
+        if (selectedDate == null) {
+            JOptionPane.showMessageDialog(null, "Por favor seleccione una fecha.");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            model.setRowCount(0);
+            String formattedDate = dateFormat.format(selectedDate);
+            String query = "SELECT Salida, Destino, HorarioSalida, Estado, Fecha, HorarioLlegada, FechaLlegada, Aerolinea " +
+                           "FROM vuelos " +
+                           "JOIN avion ON vuelos.Id_avion_vuelos = avion.id " +
+                           "WHERE DATE(Fecha) = '" + formattedDate + "'";
+        try (Connection conn = new Conexion().estableceConexion(); PreparedStatement stmt = conn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+
+            model.setRowCount(0);
+
+            while (rs.next()) {
+                String ciudadSalida = rs.getString("Salida");
+                String ciudadDestino = rs.getString("Destino");
+                LocalTime horarioSalida = rs.getTime("HorarioSalida").toLocalTime();
+                java.sql.Date fecha = rs.getDate("Fecha");
+                LocalTime horarioLlegada = rs.getTime("HorarioLlegada").toLocalTime();
+                java.sql.Date fechaLlegada = rs.getDate("FechaLlegada");
+                String aerolinea = rs.getString("Aerolinea");
+
+                Object[] vuelo = {ciudadSalida, horarioSalida, fecha, ciudadDestino, horarioLlegada, fechaLlegada, aerolinea};
+                model.addRow(vuelo);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+        }
+
+        }
     }
 
     /**
@@ -30,14 +113,16 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaInfo = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnBuscarFecha = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         inicio = new javax.swing.JButton();
+        choseerFecha = new com.toedter.calendar.JDateChooser();
+        jButton7 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,9 +141,9 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(1860, 1000));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setBackground(new java.awt.Color(153, 153, 255));
-        jTable1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaInfo.setBackground(new java.awt.Color(153, 153, 255));
+        tablaInfo.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        tablaInfo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -69,34 +154,54 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
 
             }
         ));
-        jTable1.setSelectionForeground(new java.awt.Color(204, 204, 255));
-        jScrollPane1.setViewportView(jTable1);
+        tablaInfo.setSelectionForeground(new java.awt.Color(204, 204, 255));
+        jScrollPane1.setViewportView(tablaInfo);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 555, 1211));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 555, 1211));
 
         jButton1.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         jButton1.setText("Todos");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(974, 323, 233, 66));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 260, 233, 66));
 
         jButton2.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         jButton2.setText("Vuelos mas cercanos");
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(695, 421, 512, 66));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 340, 512, 66));
 
         jButton3.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         jButton3.setText("Miami");
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(696, 220, 233, 66));
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 180, 233, 66));
 
         jButton4.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         jButton4.setText("Rio de Janeiro");
-        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(974, 220, 233, 66));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 180, 233, 66));
 
-        jButton5.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
-        jButton5.setText("Cancún");
-        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(696, 323, 233, 66));
+        btnBuscarFecha.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        btnBuscarFecha.setText("Buscar fecha");
+        btnBuscarFecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarFechaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBuscarFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 420, 230, 50));
 
         jButton6.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         jButton6.setText("Reservar");
-        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(696, 125, 512, 66));
+        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 100, 512, 66));
 
         inicio.setText("VOLVER AL INICIO");
         inicio.addActionListener(new java.awt.event.ActionListener() {
@@ -104,7 +209,12 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
                 inicioActionPerformed(evt);
             }
         });
-        jPanel1.add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(1180, 570, 190, 50));
+        jPanel1.add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 530, 190, 50));
+        jPanel1.add(choseerFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 420, 230, 50));
+
+        jButton7.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        jButton7.setText("Cancún");
+        jPanel1.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 260, 233, 66));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -129,10 +239,29 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void inicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicioActionPerformed
-       dispose();
-       SesionIniciada si = new SesionIniciada();
-       si.setVisible(true);
+        dispose();
+        SesionIniciada si = new SesionIniciada();
+        si.setVisible(true);
     }//GEN-LAST:event_inicioActionPerformed
+
+    private void btnBuscarFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarFechaActionPerformed
+
+        // TODO add your handling code here:
+vueloConFecha();
+    }//GEN-LAST:event_btnBuscarFechaActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+       consultaTodos();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -170,16 +299,18 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscarFecha;
+    private com.toedter.calendar.JDateChooser choseerFecha;
     private javax.swing.JButton inicio;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tablaInfo;
     // End of variables declaration//GEN-END:variables
 }
