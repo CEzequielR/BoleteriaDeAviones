@@ -35,7 +35,6 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
         model = new DefaultTableModel();
         tabla.setModel(model);
 
-        model.addColumn("IDvuelo");
         model.addColumn("Salida");
         model.addColumn("H. Salida");
         model.addColumn("Fecha");
@@ -52,24 +51,23 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
 
     private void consultaTodos() {
 
-        String query = "SELECT IDvuelo, Salida,HorarioSalida,  Fecha,Destino,   HorarioLlegada,FechaLLegada, Aerolinea, Estado FROM vuelos";
+        String query = "SELECT vuelos.Salida, vuelos.Destino, vuelos.HorarioSalida, vuelos.Estado, vuelos.Fecha, vuelos.HorarioLlegada, vuelos.FechaLlegada, avion.Aerolinea FROM vuelos JOIN avion ON vuelos.Id_avion_vuelos = avion.id;";
 
         try (Connection conn = new Conexion().estableceConexion(); PreparedStatement stmt = conn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
 
             model.setRowCount(0);
 
             while (rs.next()) {
-                String idVuelo = rs.getString("IDvuelo");
                 String ciudadSalida = rs.getString("Salida");
-                LocalTime horario = rs.getTime("HorarioSalida").toLocalTime();
-                Date fecha = rs.getDate("Fecha");
                 String ciudadDestino = rs.getString("Destino");
+                LocalTime horarioSalida = rs.getTime("HorarioSalida").toLocalTime();
+                Date fecha = rs.getDate("Fecha");
                 LocalTime horarioLlegada = rs.getTime("HorarioLlegada").toLocalTime();
                 Date fechaLlegada = rs.getDate("FechaLlegada");
                 String aerolinea = rs.getString("Aerolinea");
 
-                String estado = determinarEstado(horario, fecha, fechaLlegada, horarioLlegada);
-                Object[] vuelo = {idVuelo, ciudadSalida, horario, fecha, ciudadDestino,  horarioLlegada, fechaLlegada, estado, aerolinea};
+                String estado = determinarEstado(horarioSalida, fecha, fechaLlegada, horarioLlegada);
+                Object[] vuelo = {ciudadSalida, horarioSalida, fecha, ciudadDestino,  horarioLlegada, fechaLlegada, estado, aerolinea};
                 model.addRow(vuelo);
             }
 
@@ -87,18 +85,17 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
 
             model.setRowCount(0);
 
-            while (rs.next()) {
-                String idVuelo = rs.getString("IDvuelo");
+             while (rs.next()) {
                 String ciudadSalida = rs.getString("Salida");
-                LocalTime horario = rs.getTime("HorarioSalida").toLocalTime();
-                Date fecha = rs.getDate("Fecha");
                 String ciudadDestino = rs.getString("Destino");
+                LocalTime horarioSalida = rs.getTime("HorarioSalida").toLocalTime();
+                Date fecha = rs.getDate("Fecha");
                 LocalTime horarioLlegada = rs.getTime("HorarioLlegada").toLocalTime();
                 Date fechaLlegada = rs.getDate("FechaLlegada");
                 String aerolinea = rs.getString("Aerolinea");
 
-                String estado = determinarEstado(horario, fecha, fechaLlegada, horarioLlegada);
-                Object[] vuelo = {idVuelo, ciudadSalida, horario, fecha, ciudadDestino,  horarioLlegada, fechaLlegada, estado, aerolinea};
+                String estado = determinarEstado(horarioSalida, fecha, fechaLlegada, horarioLlegada);
+                Object[] vuelo = {ciudadSalida, horarioSalida, fecha, ciudadDestino,  horarioLlegada, fechaLlegada, estado, aerolinea};
                 model.addRow(vuelo);
             }
 
@@ -117,17 +114,16 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
             model.setRowCount(0);
 
             while (rs.next()) {
-                String idVuelo = rs.getString("IDvuelo");
                 String ciudadSalida = rs.getString("Salida");
-                LocalTime horario = rs.getTime("HorarioSalida").toLocalTime();
-                Date fecha = rs.getDate("Fecha");
                 String ciudadDestino = rs.getString("Destino");
+                LocalTime horarioSalida = rs.getTime("HorarioSalida").toLocalTime();
+                Date fecha = rs.getDate("Fecha");
                 LocalTime horarioLlegada = rs.getTime("HorarioLlegada").toLocalTime();
                 Date fechaLlegada = rs.getDate("FechaLlegada");
                 String aerolinea = rs.getString("Aerolinea");
 
-                String estado = determinarEstado(horario, fecha, fechaLlegada, horarioLlegada);
-                Object[] vuelo = {idVuelo, ciudadSalida, horario, fecha, ciudadDestino,  horarioLlegada, fechaLlegada, estado, aerolinea};
+                String estado = determinarEstado(horarioSalida, fecha, fechaLlegada, horarioLlegada);
+                Object[] vuelo = {ciudadSalida, horarioSalida, fecha, ciudadDestino,  horarioLlegada, fechaLlegada, estado, aerolinea};
                 model.addRow(vuelo);
             }
 
@@ -138,22 +134,19 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
 
     private String determinarEstado(LocalTime horario, Date fecha, Date fechaLlegada, LocalTime horarioLlegada) {
 
-     LocalTime horaActual = LocalTime.now();
+        LocalTime horaActual = LocalTime.now();
         LocalDate fechaActual = LocalDate.now();
         LocalDate fechaSalidaVuelo = fecha.toLocalDate();
         LocalDate fechaLlegadaVuelo = fechaLlegada.toLocalDate();
 
-
-            if (fechaActual.isAfter(fechaLlegadaVuelo) && horaActual.isAfter(horarioLlegada)) {
-                return "Aterrizado";
-            } else if (fechaActual.isBefore(fechaSalidaVuelo) && horaActual.isBefore(horario)) {
-                return "Programado";
-            } else {
-                return "A tiempo";
-            }
+        if (!fechaActual.isBefore(fechaLlegadaVuelo) && horaActual.isAfter(horarioLlegada)) {
+            return "Aterrizado";
+        } else if (!fechaActual.isAfter(fechaSalidaVuelo) && horaActual.isBefore(horario)) {
+            return "Programado";
+        } else {
+            return "A tiempo";
         }
-    
-    
+    }
 
     private void iniciarTimer() {
         int delay = 60000; // Intervalo de actualización en milisegundos (ejemplo: cada 60 segundos)
@@ -182,6 +175,7 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
         btnVuelosDelDia = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1213, 632));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         inicio.setText("VOLVER AL INICIO");
@@ -190,10 +184,10 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
                 inicioActionPerformed(evt);
             }
         });
-        getContentPane().add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 600, 700, 40));
+        getContentPane().add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 600, 700, 40));
 
         jLabel1.setText("HORARIOS Y ESTADOS DE TODOS LOS VUELOS");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 60, 280, 50));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 60, 280, 50));
 
         tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -208,7 +202,7 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tabla);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 120, 950, 400));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 120, 950, 400));
 
         btnTodosLosVuelos.setText("MOSTRAR TODOS LOS VUELOS");
         btnTodosLosVuelos.addActionListener(new java.awt.event.ActionListener() {
@@ -216,7 +210,7 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
                 btnTodosLosVuelosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnTodosLosVuelos, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 540, 240, -1));
+        getContentPane().add(btnTodosLosVuelos, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 540, 240, -1));
 
         btnVuelosDiferidos.setText("MOSTRAR VUELOS PROGRAMADOS");
         btnVuelosDiferidos.addActionListener(new java.awt.event.ActionListener() {
@@ -224,7 +218,7 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
                 btnVuelosDiferidosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnVuelosDiferidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 540, 240, -1));
+        getContentPane().add(btnVuelosDiferidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 540, 240, -1));
 
         btnVuelosDelDia.setText("MOSTRAR VUELOS DEL DÍA");
         btnVuelosDelDia.addActionListener(new java.awt.event.ActionListener() {
@@ -232,7 +226,7 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
                 btnVuelosDelDiaActionPerformed(evt);
             }
         });
-        getContentPane().add(btnVuelosDelDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 540, 280, -1));
+        getContentPane().add(btnVuelosDelDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 540, 280, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
