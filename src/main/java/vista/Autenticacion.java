@@ -5,6 +5,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -280,7 +290,7 @@ public class Autenticacion extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
             SesionIniciada si = new SesionIniciada();
             si.setVisible(true);
-                        si.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            si.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         } else {
             JOptionPane.showMessageDialog(null, "Correo o contraseña incorrectos");
@@ -296,10 +306,10 @@ public class Autenticacion extends javax.swing.JFrame {
 
             int ts = pstmt.executeUpdate();
             JOptionPane.showMessageDialog(null, "Usuario guardado correctamente");
-            return true; 
+            return true;
         } catch (SQLException e) {
             System.out.println("Error al guardar usuario: " + e.getMessage());
-            return false; 
+            return false;
         } finally {
             try {
                 conn.close();
@@ -339,7 +349,7 @@ public class Autenticacion extends javax.swing.JFrame {
         } catch (SQLException ex) {
             System.out.println("Error al consultar si el usuario está registrado: " + ex.getMessage());
         }
-        return false; 
+        return false;
     }
 
     public boolean validarCorreoElectronico(String correo) {
@@ -348,7 +358,6 @@ public class Autenticacion extends javax.swing.JFrame {
     }
 
     private boolean registrarUsuario(String nombre, String apellido, String correo, String contrasenia) {
-
         if (usuarioYaRegistrado(correo)) {
             JOptionPane.showMessageDialog(null, "El correo electrónico ya está registrado");
             return false;
@@ -365,6 +374,7 @@ public class Autenticacion extends javax.swing.JFrame {
                 pstmt.setString(4, contrasenia);
 
                 int rowsAffected = pstmt.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Usuario registrado correctamente");
                 return rowsAffected > 0;
             } catch (SQLException ex) {
                 System.out.println("Error al registrar usuario: " + ex.getMessage());
@@ -404,44 +414,76 @@ public class Autenticacion extends javax.swing.JFrame {
     }//GEN-LAST:event_labelOlvidasteContraseñaMouseExited
 
     private void btnRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistroActionPerformed
-        String nombre = txtNombreRegistro.getText();
-        String apellido = txtApellidoRegistro.getText();
-        String correo = txtEmailRegistro.getText();
-        String contrasenia = new String(txtcontraseñaregistro.getPassword());
-        String confirmarContrasena = new String(txtconfirmarcontraseña.getPassword());
+        try {
+            Properties props = new Properties();
+            props.setProperty("mail.smtp.host", "smtp.gmail.com");
+            props.setProperty("mail.smtp.starttls.enable", "true");
+            props.setProperty("mail.smtp.port", "587");
+            props.setProperty("mail.smtp.auth", "true");
 
-        if (!validarCorreoElectronico(correo)) {
-            labelcorreo.setText("El formato del correo electrónico no es válido");
-            return;
-        } else {
-            labelcorreo.setText("");
-        }
+            Session session = Session.getDefaultInstance(props);
 
-        if (nombre.isEmpty() || apellido.isEmpty() || correo.isEmpty() || contrasenia.isEmpty() || confirmarContrasena.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios. Por favor, llénelos.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+            String correoRemitente = "aerolineasezisina@gmail.com";
+            String passwordRemitente = "t p w x c n f r re c a s i t i";
+            String correoReceptor = txtEmailRegistro.getText();
+            String asunto = "Correo en Java";
+            String mensaje = "Validación de correo";
 
-        if (!contrasenia.equals(confirmarContrasena)) {
-            JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden. Por favor, inténtelo de nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(correoRemitente));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoReceptor));
+            message.setSubject(asunto);
+            message.setText(mensaje);
 
-        if (contrasenia.length() < 8) {
-            labelcontrasenia.setText("La contraseña debe tener al menos 8 caracteres");
-            return;
-        } else {
-            labelcontrasenia.setText("");
-        }
+            Transport transport = session.getTransport("smtp");
 
-        if (registrarUsuario(nombre, apellido, correo, contrasenia)) {
-            JOptionPane.showMessageDialog(null, "Usuario registrado correctamente");
-            
+            String nombre = txtNombreRegistro.getText();
+            String apellido = txtApellidoRegistro.getText();
+            String correo = txtEmailRegistro.getText();
+            String contrasenia = new String(txtcontraseñaregistro.getPassword());
+            String confirmarContrasena = new String(txtconfirmarcontraseña.getPassword());
+
+            if (!validarCorreoElectronico(correo)) {
+                labelcorreo.setText("El formato del correo electrónico no es válido");
+                return;
+            } else {
+                labelcorreo.setText("");
+            }
+
+            if (nombre.isEmpty() || apellido.isEmpty() || correo.isEmpty() || contrasenia.isEmpty() || confirmarContrasena.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios. Por favor, llénelos.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!contrasenia.equals(confirmarContrasena)) {
+                JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden. Por favor, inténtelo de nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (contrasenia.length() < 8) {
+                labelcontrasenia.setText("La contraseña debe tener al menos 8 caracteres");
+                return;
+            } else {
+                labelcontrasenia.setText("");
+            }
+
+            transport.connect(correoRemitente, passwordRemitente);
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
+
+            // Si llega aquí, el correo se envió correctamente
+            JOptionPane.showMessageDialog(null, "Correo enviado correctamente a: " + correoReceptor);
+            registrarUsuario(nombre,apellido,correo,contrasenia);
+            //JOptionPane.showMessageDialog(null, "Usuario registrado correctamente");
+
             SesionIniciada si = new SesionIniciada();
             si.setVisible(true);
 
-        } else {
-            JOptionPane.showMessageDialog(null, "Error al registrar usuario");
+        } catch (AddressException ex) {
+            Logger.getLogger(Autenticacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MessagingException ex) {
+            Logger.getLogger(Autenticacion.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error al enviar el correo");
         }
     }//GEN-LAST:event_btnRegistroActionPerformed
 

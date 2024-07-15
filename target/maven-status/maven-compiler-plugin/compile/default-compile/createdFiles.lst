@@ -2,7 +2,8 @@ vista\InformacionDeVuelos$3.class
 vista\GestionDeReservas$2.class
 vista\SesionIniciada$3.class
 vista\InformacionDeVuelos.class
-vista\OlvidarContraseña$1.class
+vista\OlvidarContraseÃ±a$1.class
+vista\BusquedaDeVuelos$5.class
 vista\SesionIniciada$5.class
 vista\ReservaDePasajes$1.class
 vista\Autenticacion$4.class
@@ -13,16 +14,19 @@ vista\InformacionDeVuelos$1.class
 vista\Autenticacion$1.class
 vista\BusquedaDeVuelos.class
 vista\SesionIniciada$2.class
+vista\BusquedaDeVuelos$3.class
 vista\SesionIniciada$7.class
 vista\Autenticacion$6.class
+vista\BusquedaDeVuelos$4.class
 controlador\Inicio.class
 vista\CompraDePasajes.class
 vista\SesionIniciada.class
 vista\SesionIniciada$4.class
 vista\Autenticacion$5.class
 vista\InformacionDeVuelos$4.class
+vista\BusquedaDeVuelos$6.class
 vista\GestionDeReservas$1.class
-vista\OlvidarContraseña$1$1.class
+vista\OlvidarContraseÃ±a$1$1.class
 vista\BusquedaDeVuelos$1.class
 vista\ElegirButaca$1.class
 vista\SesionIniciada$6.class
@@ -37,4 +41,4 @@ vista\Autenticacion.class
 vista\InformacionDeVuelos$2.class
 vista\Autenticacion$2.class
 vista\CompraDePasajes$2.class
-vista\OlvidarContraseña.class
+vista\OlvidarContraseÃ±a.class
