@@ -4,6 +4,24 @@
  */
 package vista;
 
+import com.sun.jdi.connect.spi.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.NoSuchProviderException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Lenovo
@@ -16,6 +34,24 @@ public class OlvidarContraseña extends javax.swing.JDialog {
     public OlvidarContraseña(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+    }
+       private String devolverContraseña(String correo) {
+        java.sql.Connection conn = new Conexion().estableceConexion();
+        String sql = "SELECT contrasenia FROM usuarios WHERE correo = ?;";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, correo);
+   
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                String password = rs.getString("contrasenia");
+                return password;
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al consultar usuario: " + ex.getMessage());
+            return "Error";
+        }
+return null;
     }
 
     /**
@@ -31,6 +67,7 @@ public class OlvidarContraseña extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         txtCorreoOlvidado = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
+        btnRecuperar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(204, 204, 255));
@@ -62,8 +99,78 @@ public class OlvidarContraseña extends javax.swing.JDialog {
         getContentPane().add(txtCorreoOlvidado, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, 260, -1));
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 230, 260, -1));
 
+        btnRecuperar.setText("Recuperar Contraseña");
+        btnRecuperar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRecuperarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnRecuperar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 180, 210, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnRecuperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecuperarActionPerformed
+        // TODO add your handling code here:
+        
+        Properties props = new Properties();
+        props.setProperty("mail.smtp.host", "smtp.gmail.com");
+        props.setProperty("mail.smtp.starttls.enable", "true");
+        props.setProperty("mail.smtp.port", "587");
+        props.setProperty("mail.smtp.auth", "true");
+        Session session = Session.getDefaultInstance(props);
+        String correoRemitente = "aerolineasezisina@gmail.com";
+        String passwordRemitente = "t p w x c n f r re c a s i t i";
+        String correoReceptor = txtCorreoOlvidado.getText();
+        String asunto = "Correo en Java";
+        String mensaje = "Su contraseña es: "+devolverContraseña(correoReceptor);
+        MimeMessage message = new MimeMessage(session);
+        try {
+            message.setFrom(new InternetAddress(correoRemitente));
+        } catch (AddressException ex) { 
+            Logger.getLogger(OlvidarContraseña.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MessagingException ex) { 
+            Logger.getLogger(OlvidarContraseña.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoReceptor));
+        } catch (MessagingException ex) {
+            Logger.getLogger(OlvidarContraseña.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            message.setSubject(asunto);
+        } catch (MessagingException ex) {
+            Logger.getLogger(OlvidarContraseña.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            message.setText(mensaje);
+        } catch (MessagingException ex) {
+            Logger.getLogger(OlvidarContraseña.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Transport transport = null;
+        try {
+            transport = session.getTransport("smtp");
+        } catch (NoSuchProviderException ex) {
+            Logger.getLogger(OlvidarContraseña.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            transport.connect(correoRemitente, passwordRemitente);
+        } catch (MessagingException ex) {
+            Logger.getLogger(OlvidarContraseña.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            transport.sendMessage(message, message.getAllRecipients());
+        } catch (MessagingException ex) {
+            Logger.getLogger(OlvidarContraseña.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            transport.close();
+        } catch (MessagingException ex) {
+            Logger.getLogger(OlvidarContraseña.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JOptionPane.showMessageDialog(null, "Su contraseña ha sido enviada a su correo electrónico: " + correoReceptor);
+
+    }//GEN-LAST:event_btnRecuperarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -108,6 +215,7 @@ public class OlvidarContraseña extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRecuperar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;

@@ -6,8 +6,11 @@ import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import javax.swing.table.DefaultTableModel;
@@ -38,8 +41,12 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         model.addColumn("Aerolínea");
 
         consultaTodos();
+        //Acá debe estar llamado el método para inicializar el combobox
+        
     }
 
+    //Acá hacer el método para llenar los combo box
+    
     private void consultaTodos() {
         String query = "SELECT vuelos.Salida, vuelos.Destino, vuelos.HorarioSalida, vuelos.Estado, vuelos.Fecha, vuelos.HorarioLlegada, vuelos.FechaLlegada, avion.Aerolinea FROM vuelos JOIN avion ON vuelos.Id_avion_vuelos = avion.id WHERE DATE(Fecha) > CURDATE();";
 
@@ -64,42 +71,14 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         } catch (SQLException e) {
             System.out.println("Error al ejecutar la consulta: " + e.getMessage());
         }
+        
+        
+        
     }
 
-    private void vueloConFecha() {
-               Date selectedDate = choseerFecha.getDate();
-        if (selectedDate == null) {
-            JOptionPane.showMessageDialog(null, "Por favor seleccione una fecha.");
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            model.setRowCount(0);
-            String formattedDate = dateFormat.format(selectedDate);
-            String query = "SELECT Salida, Destino, HorarioSalida, Estado, Fecha, HorarioLlegada, FechaLlegada, Aerolinea " +
-                           "FROM vuelos " +
-                           "JOIN avion ON vuelos.Id_avion_vuelos = avion.id " +
-                           "WHERE DATE(Fecha) = '" + formattedDate + "'";
-        try (Connection conn = new Conexion().estableceConexion(); PreparedStatement stmt = conn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
 
-            model.setRowCount(0);
 
-            while (rs.next()) {
-                String ciudadSalida = rs.getString("Salida");
-                String ciudadDestino = rs.getString("Destino");
-                LocalTime horarioSalida = rs.getTime("HorarioSalida").toLocalTime();
-                java.sql.Date fecha = rs.getDate("Fecha");
-                LocalTime horarioLlegada = rs.getTime("HorarioLlegada").toLocalTime();
-                java.sql.Date fechaLlegada = rs.getDate("FechaLlegada");
-                String aerolinea = rs.getString("Aerolinea");
-
-                Object[] vuelo = {ciudadSalida, horarioSalida, fecha, ciudadDestino, horarioLlegada, fechaLlegada, aerolinea};
-                model.addRow(vuelo);
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error al ejecutar la consulta: " + e.getMessage());
-        }
-
-        }
-    }
+     
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -114,15 +93,16 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaInfo = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         btnBuscarFecha = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         inicio = new javax.swing.JButton();
         choseerFecha = new com.toedter.calendar.JDateChooser();
-        jButton7 = new javax.swing.JButton();
+        comboDestino = new javax.swing.JComboBox<>();
+        comboOrigen = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -159,49 +139,18 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 555, 1211));
 
-        jButton1.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
-        jButton1.setText("Todos");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 260, 233, 66));
-
-        jButton2.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
-        jButton2.setText("Vuelos mas cercanos");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 340, 512, 66));
-
-        jButton3.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
-        jButton3.setText("Miami");
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 180, 233, 66));
-
-        jButton4.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
-        jButton4.setText("Rio de Janeiro");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 180, 233, 66));
-
         btnBuscarFecha.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
-        btnBuscarFecha.setText("Buscar fecha");
+        btnBuscarFecha.setText("Buscar");
         btnBuscarFecha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarFechaActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBuscarFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 420, 230, 50));
+        jPanel1.add(btnBuscarFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 320, 160, 40));
 
         jButton6.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         jButton6.setText("Reservar");
-        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 100, 512, 66));
+        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 390, 230, 66));
 
         inicio.setText("VOLVER AL INICIO");
         inicio.addActionListener(new java.awt.event.ActionListener() {
@@ -209,12 +158,32 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
                 inicioActionPerformed(evt);
             }
         });
-        jPanel1.add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 530, 190, 50));
-        jPanel1.add(choseerFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 420, 230, 50));
+        jPanel1.add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 480, 230, 60));
+        jPanel1.add(choseerFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 320, 230, 40));
 
-        jButton7.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
-        jButton7.setText("Cancún");
-        jPanel1.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 260, 233, 66));
+        comboDestino.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(comboDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 180, 230, 40));
+
+        comboOrigen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(comboOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 100, 230, 40));
+
+        jLabel1.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Destino");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 150, -1, -1));
+
+        jLabel2.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("Pasajeros");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 230, -1, -1));
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, 230, 40));
+
+        jLabel3.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("Origen");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 70, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -222,9 +191,12 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -245,23 +217,53 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
     }//GEN-LAST:event_inicioActionPerformed
 
     private void btnBuscarFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarFechaActionPerformed
+    java.sql.Connection conn = new Conexion().estableceConexion();
+    String sql = "SELECT vuelos.Salida, vuelos.Destino, vuelos.HorarioSalida, vuelos.Fecha, vuelos.HorarioLlegada, vuelos.FechaLlegada, avion.Aerolinea FROM vuelos JOIN avion ON vuelos.Id_avion_vuelos = avion.id WHERE vuelos.Fecha = ?, vuelos.Salida = ?, vuelos.Destino = ?;";
+    
+    
+    //JDateChooser
+    try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        // Obtener la fecha seleccionada del JDateChooser
+        Date selectedDate = (Date) choseerFecha.getDate();
+        java.sql.Date sqlDate = new java.sql.Date(selectedDate.getTime());
+        
+        
+        try {
+            pstmt.setDate(1, sqlDate);
+        } catch (SQLException ex) {
+            Logger.getLogger(BusquedaDeVuelos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ((DefaultTableModel) tablaInfo.getModel()).setRowCount(0);
+        // Ejecutar la consulta y obtener el ResultSet
+        try (ResultSet rs = pstmt.executeQuery()) {
+            // Procesar el ResultSet
+            while (rs.next()) {
+                // Obtén los datos del ResultSet y haz lo necesario con ellos
+                String salida = rs.getString("Salida");
+                String destino = rs.getString("Destino");
+                Time horarioSalida = rs.getTime("HorarioSalida");
+                Date fecha = rs.getDate("Fecha");
+                Time horarioLlegada = rs.getTime("HorarioLlegada");
+                Date fechaLlegada = rs.getDate("FechaLlegada");
+                String aerolinea = rs.getString("Aerolinea");
 
-        // TODO add your handling code here:
-vueloConFecha();
+                // Imprimir o procesar los datos obtenidos
+                Object[] vuelo = {salida, horarioSalida, fecha, destino,  horarioLlegada, fechaLlegada, aerolinea};
+                model.addRow(vuelo);
+            }
+
+
+        } catch (SQLException e) {
+            System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+        }
+    }   catch (SQLException ex) {
+            Logger.getLogger(BusquedaDeVuelos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+        
+
+
     }//GEN-LAST:event_btnBuscarFechaActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-       consultaTodos();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -301,13 +303,14 @@ vueloConFecha();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarFecha;
     private com.toedter.calendar.JDateChooser choseerFecha;
+    private javax.swing.JComboBox<String> comboDestino;
+    private javax.swing.JComboBox<String> comboOrigen;
     private javax.swing.JButton inicio;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
