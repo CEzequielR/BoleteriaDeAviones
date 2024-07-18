@@ -31,13 +31,16 @@ public class SesionIniciada extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         btnInicio = new javax.swing.JButton();
         busquedaVuelos = new javax.swing.JButton();
-        reservaPasajes = new javax.swing.JButton();
-        compraPasajes = new javax.swing.JButton();
         gestionReservas = new javax.swing.JButton();
         informacionVuelos = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(0, 102, 255));
+        jPanel1.setForeground(new java.awt.Color(0, 153, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnInicio.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 24)); // NOI18N
@@ -50,51 +53,59 @@ public class SesionIniciada extends javax.swing.JFrame {
         });
         jPanel1.add(btnInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 760, 228, 33));
 
-        busquedaVuelos.setText("BÚSQUEDA DE VUELOS");
+        busquedaVuelos.setBackground(new java.awt.Color(255, 255, 255));
+        busquedaVuelos.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        busquedaVuelos.setForeground(new java.awt.Color(0, 153, 255));
+        busquedaVuelos.setText("Busqueda de vuelos");
         busquedaVuelos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 busquedaVuelosActionPerformed(evt);
             }
         });
-        jPanel1.add(busquedaVuelos, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 40, 180, 30));
+        jPanel1.add(busquedaVuelos, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 180, 550, 50));
 
-        reservaPasajes.setText("RESERVA DE PASAJES");
-        reservaPasajes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                reservaPasajesActionPerformed(evt);
-            }
-        });
-        jPanel1.add(reservaPasajes, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 90, 180, 30));
-
-        compraPasajes.setText("COMPRA DE PASAJES");
-        compraPasajes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                compraPasajesActionPerformed(evt);
-            }
-        });
-        jPanel1.add(compraPasajes, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 140, 180, 30));
-
-        gestionReservas.setText("GESTIÓN DE RESERVAS");
+        gestionReservas.setBackground(new java.awt.Color(255, 255, 255));
+        gestionReservas.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        gestionReservas.setForeground(new java.awt.Color(0, 102, 255));
+        gestionReservas.setText("Gestión de reservas");
         gestionReservas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 gestionReservasActionPerformed(evt);
             }
         });
-        jPanel1.add(gestionReservas, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 190, 180, 30));
+        jPanel1.add(gestionReservas, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 330, 550, 50));
 
-        informacionVuelos.setText("INFORMACIÓN DE VUELOS");
+        informacionVuelos.setBackground(new java.awt.Color(255, 255, 255));
+        informacionVuelos.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        informacionVuelos.setForeground(new java.awt.Color(0, 102, 255));
+        informacionVuelos.setText("Información de vuelos");
         informacionVuelos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 informacionVuelosActionPerformed(evt);
             }
         });
-        jPanel1.add(informacionVuelos, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 240, 180, 30));
+        jPanel1.add(informacionVuelos, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 480, 550, 50));
+
+        jLabel1.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("En esta sección podrás ver la información de todos los vuelos.");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 420, -1, -1));
+
+        jLabel2.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("En este apartado podrás buscar vuelos, consultar precios y crear una reserva de vuelo.");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, -1, -1));
+
+        jLabel3.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("En esta sección podrás ver el estado de tus reservas, pagarlas y cancelarlas.");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 270, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1094, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -111,27 +122,12 @@ public class SesionIniciada extends javax.swing.JFrame {
         aute1.setVisible(true);
     }//GEN-LAST:event_btnInicioActionPerformed
 
-    private void reservaPasajesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reservaPasajesActionPerformed
-        dispose();
-        ReservaDePasajes rp = new ReservaDePasajes();
-        rp.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-        rp.setVisible(true);
-    }//GEN-LAST:event_reservaPasajesActionPerformed
-
     private void busquedaVuelosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busquedaVuelosActionPerformed
         dispose();
         BusquedaDeVuelos bdv = new BusquedaDeVuelos();
         bdv.setExtendedState(JFrame.MAXIMIZED_BOTH);
         bdv.setVisible(true);
     }//GEN-LAST:event_busquedaVuelosActionPerformed
-
-    private void compraPasajesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compraPasajesActionPerformed
-        dispose();
-        CompraDePasajes cdp = new CompraDePasajes();
-        cdp.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        cdp.setVisible(true);
-    }//GEN-LAST:event_compraPasajesActionPerformed
 
     private void gestionReservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gestionReservasActionPerformed
         dispose();
@@ -184,10 +180,11 @@ public class SesionIniciada extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInicio;
     private javax.swing.JButton busquedaVuelos;
-    private javax.swing.JButton compraPasajes;
     private javax.swing.JButton gestionReservas;
     private javax.swing.JButton informacionVuelos;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JButton reservaPasajes;
     // End of variables declaration//GEN-END:variables
 }

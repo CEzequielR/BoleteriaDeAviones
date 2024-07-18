@@ -15,6 +15,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Random;
 import javax.crypto.AEADBadTagException;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
@@ -137,7 +138,7 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
         LocalDate fechaSalidaVuelo = fecha.toLocalDate();
         LocalDate fechaLlegadaVuelo = fechaLlegada.toLocalDate();
 
-        if (!fechaActual.isBefore(fechaLlegadaVuelo) && horaActual.isAfter(horarioLlegada)) {
+        if ((fechaActual.isAfter(fechaLlegadaVuelo)) || (!fechaActual.isBefore(fechaLlegadaVuelo) && !horaActual.isBefore(horarioLlegada)) ) {
             return "Aterrizado";
         } else if (!fechaActual.isAfter(fechaSalidaVuelo) && horaActual.isBefore(horario)) {
             return "Programado";
@@ -164,29 +165,74 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         inicio = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        btnTodosLosVuelos = new javax.swing.JButton();
+        btnVuelosDelDia = new javax.swing.JButton();
+        btnVuelosDiferidos = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
-        btnTodosLosVuelos = new javax.swing.JButton();
-        btnVuelosDiferidos = new javax.swing.JButton();
-        btnVuelosDelDia = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 102, 255));
         setPreferredSize(new java.awt.Dimension(1213, 632));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        inicio.setText("VOLVER AL INICIO");
+        jPanel1.setBackground(new java.awt.Color(0, 153, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        inicio.setBackground(new java.awt.Color(255, 255, 255));
+        inicio.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 18)); // NOI18N
+        inicio.setForeground(new java.awt.Color(0, 153, 255));
+        inicio.setText("Volver al inicio");
         inicio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inicioActionPerformed(evt);
             }
         });
-        getContentPane().add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 600, 700, 40));
+        jPanel1.add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 600, 950, 40));
 
-        jLabel1.setText("HORARIOS Y ESTADOS DE TODOS LOS VUELOS");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 60, 280, 50));
+        jLabel1.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
+        jLabel1.setText("Horarios y estados de los vuelos");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, 400, 50));
 
+        btnTodosLosVuelos.setBackground(new java.awt.Color(255, 255, 255));
+        btnTodosLosVuelos.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 12)); // NOI18N
+        btnTodosLosVuelos.setForeground(new java.awt.Color(0, 153, 255));
+        btnTodosLosVuelos.setText("Mostrar todos los vuelos");
+        btnTodosLosVuelos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTodosLosVuelosActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnTodosLosVuelos, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 540, 240, -1));
+
+        btnVuelosDelDia.setBackground(new java.awt.Color(255, 255, 255));
+        btnVuelosDelDia.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 14)); // NOI18N
+        btnVuelosDelDia.setForeground(new java.awt.Color(0, 153, 255));
+        btnVuelosDelDia.setText("Vuelos del día");
+        btnVuelosDelDia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVuelosDelDiaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnVuelosDelDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 540, 280, -1));
+
+        btnVuelosDiferidos.setBackground(new java.awt.Color(255, 255, 255));
+        btnVuelosDiferidos.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 14)); // NOI18N
+        btnVuelosDiferidos.setForeground(new java.awt.Color(0, 153, 255));
+        btnVuelosDiferidos.setText("Vuelos de los próximos días");
+        btnVuelosDiferidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVuelosDiferidosActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnVuelosDiferidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 540, 240, -1));
+
+        tabla.setBackground(new java.awt.Color(0, 102, 255));
+        tabla.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 12)); // NOI18N
+        tabla.setForeground(new java.awt.Color(255, 255, 255));
         tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -198,33 +244,13 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
 
             }
         ));
+        tabla.setSelectionBackground(new java.awt.Color(255, 255, 255));
+        tabla.setSelectionForeground(new java.awt.Color(0, 0, 0));
         jScrollPane1.setViewportView(tabla);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 120, 950, 400));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 120, 950, 400));
 
-        btnTodosLosVuelos.setText("MOSTRAR TODOS LOS VUELOS");
-        btnTodosLosVuelos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTodosLosVuelosActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnTodosLosVuelos, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 540, 240, -1));
-
-        btnVuelosDiferidos.setText("VUELOS DE LOS PRÓXIMOS DÍAS");
-        btnVuelosDiferidos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVuelosDiferidosActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnVuelosDiferidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 540, 240, -1));
-
-        btnVuelosDelDia.setText("VUELOS DEL DÍA");
-        btnVuelosDelDia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVuelosDelDiaActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnVuelosDelDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 540, 280, -1));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1350, 680));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -232,7 +258,9 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
     private void inicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicioActionPerformed
         dispose();
         SesionIniciada si = new SesionIniciada();
+        si.setExtendedState(JFrame.MAXIMIZED_BOTH);
         si.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_inicioActionPerformed
 
     private void btnTodosLosVuelosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTodosLosVuelosActionPerformed
@@ -280,6 +308,7 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Autenticacion().setVisible(true);
+ 
             }
         });
     }
@@ -290,6 +319,7 @@ public class InformacionDeVuelos extends javax.swing.JFrame {
     private javax.swing.JButton btnVuelosDiferidos;
     private javax.swing.JButton inicio;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables

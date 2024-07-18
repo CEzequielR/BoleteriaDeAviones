@@ -62,16 +62,17 @@ public class Autenticacion extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        panelFondo.setBackground(new java.awt.Color(153, 153, 255));
+        panelFondo.setBackground(new java.awt.Color(0, 102, 255));
         panelFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        panelRegistro.setBackground(new java.awt.Color(204, 204, 255));
-        panelRegistro.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        panelRegistro.setBackground(new java.awt.Color(0, 153, 255));
+        panelRegistro.setBorder(new javax.swing.border.MatteBorder(null));
 
         jLabel2.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("REGISTRARSE");
 
-        jPanel6.setBackground(new java.awt.Color(204, 204, 255));
+        jPanel6.setBackground(new java.awt.Color(0, 153, 255));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtNombreRegistro.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
@@ -82,33 +83,37 @@ public class Autenticacion extends javax.swing.JFrame {
                 txtNombreRegistroActionPerformed(evt);
             }
         });
-        jPanel6.add(txtNombreRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 349, 30));
+        jPanel6.add(txtNombreRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 160, 30));
 
         label3.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        label3.setForeground(new java.awt.Color(255, 255, 255));
         label3.setText("Apellido");
-        jPanel6.add(label3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
+        jPanel6.add(label3, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, -1, -1));
 
         label4.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        label4.setForeground(new java.awt.Color(255, 255, 255));
         label4.setText("Nombre");
-        jPanel6.add(label4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+        jPanel6.add(label4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, -1, -1));
 
         txtApellidoRegistro.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         txtApellidoRegistro.setForeground(new java.awt.Color(102, 102, 102));
         txtApellidoRegistro.setBorder(javax.swing.BorderFactory.createCompoundBorder());
-        jPanel6.add(txtApellidoRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 349, 30));
+        jPanel6.add(txtApellidoRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 50, 150, 30));
 
         label5.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        label5.setForeground(new java.awt.Color(255, 255, 255));
         label5.setText("Correo Electrónico");
-        jPanel6.add(label5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, -1, -1));
+        jPanel6.add(label5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
 
         txtEmailRegistro.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         txtEmailRegistro.setForeground(new java.awt.Color(102, 102, 102));
         txtEmailRegistro.setBorder(javax.swing.BorderFactory.createCompoundBorder());
-        jPanel6.add(txtEmailRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 349, 30));
+        jPanel6.add(txtEmailRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 160, 30));
 
         label6.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        label6.setForeground(new java.awt.Color(255, 255, 255));
         label6.setText("Contraseña");
-        jPanel6.add(label6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, -1, -1));
+        jPanel6.add(label6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, -1, -1));
 
         btnRegistro.setBackground(new java.awt.Color(51, 51, 51));
         btnRegistro.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 24)); // NOI18N
@@ -119,13 +124,14 @@ public class Autenticacion extends javax.swing.JFrame {
                 btnRegistroActionPerformed(evt);
             }
         });
-        jPanel6.add(btnRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 470, 349, 39));
-        jPanel6.add(txtcontraseñaregistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 350, 40));
+        jPanel6.add(btnRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 380, 349, 39));
+        jPanel6.add(txtcontraseñaregistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 160, 30));
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Confirmar contraseña");
-        jPanel6.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 400, 180, -1));
-        jPanel6.add(txtconfirmarcontraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 430, 350, 30));
+        jPanel6.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, 180, -1));
+        jPanel6.add(txtconfirmarcontraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, 160, 30));
         jPanel6.add(labelcontrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 340, 30));
         jPanel6.add(labelcorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 330, -1));
 
@@ -137,26 +143,29 @@ public class Autenticacion extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addComponent(jLabel2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRegistroLayout.createSequentialGroup()
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(panelRegistroLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE))
         );
         panelRegistroLayout.setVerticalGroup(
             panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelRegistroLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(12, 12, 12))
         );
 
         panelFondo.add(panelRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(793, 52, -1, 580));
 
-        panelInicioSesion.setBackground(new java.awt.Color(204, 204, 255));
-        panelInicioSesion.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        panelInicioSesion.setBackground(new java.awt.Color(51, 153, 255));
+        panelInicioSesion.setBorder(new javax.swing.border.MatteBorder(null));
+        panelInicioSesion.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
 
+        jLabel3.setBackground(new java.awt.Color(255, 255, 255));
         jLabel3.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("INICIAR SESIÓN");
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
@@ -182,9 +191,11 @@ public class Autenticacion extends javax.swing.JFrame {
         });
 
         label1.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        label1.setForeground(new java.awt.Color(255, 255, 255));
         label1.setText("Contraseña");
 
         label2.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        label2.setForeground(new java.awt.Color(255, 255, 255));
         label2.setText("Correo Electrónico");
 
         btnInicio.setBackground(new java.awt.Color(51, 51, 51));
@@ -198,6 +209,7 @@ public class Autenticacion extends javax.swing.JFrame {
         });
 
         labelOlvidasteContraseña.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
+        labelOlvidasteContraseña.setForeground(new java.awt.Color(51, 51, 51));
         labelOlvidasteContraseña.setText("¿Olvidaste la contraseña?");
         labelOlvidasteContraseña.setToolTipText("");
         labelOlvidasteContraseña.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -254,7 +266,7 @@ public class Autenticacion extends javax.swing.JFrame {
                 .addComponent(labelOlvidasteContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(49, 49, 49)
                 .addComponent(btnInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(229, Short.MAX_VALUE))
+                .addContainerGap(231, Short.MAX_VALUE))
         );
 
         panelFondo.add(panelInicioSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(111, 52, 410, 580));
@@ -263,7 +275,7 @@ public class Autenticacion extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelFondo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelFondo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1221, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -288,9 +300,11 @@ public class Autenticacion extends javax.swing.JFrame {
 
         if (consultarUsuario(correo, contrasenia)) {
             JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
-            SesionIniciada si = new SesionIniciada();
-            si.setVisible(true);
+            SesionIniciada si = new SesionIniciada();            
             si.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            si.setVisible(true);
+            this.dispose();
+
 
         } else {
             JOptionPane.showMessageDialog(null, "Correo o contraseña incorrectos");

@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -21,7 +22,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
     private int cantPasajeros;
     private int codigoVuelo;
     public int idReserva;
-   
+
     public BusquedaDeVuelos() {
         initComponents();
         model = new DefaultTableModel();
@@ -34,13 +35,12 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         model.addColumn("H. Llegada");
         model.addColumn("Fecha Llegada");
         model.addColumn("Aerolínea");
-        model.addColumn("Cantidad pasajeros");
+        model.addColumn("Precio");
 
         consultaTodos();
         //Acá debe estar llamado el método para inicializar el combobox
 
     }
-    
 
     //Acá hacer el método para llenar los combo box
     private void consultaTodos() {
@@ -62,7 +62,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
                 Date fechaLlegada = rs.getDate("FechaLlegada");
                 String aerolinea = rs.getString("Aerolinea");
                 String pasajeros = rs.getString("Cantidad_pasajeros");
-                Object[] vuelo = {ciudadSalida, horarioSalida, fechaString, ciudadDestino, horarioLlegada, fechaLlegada, aerolinea, pasajeros};
+                Object[] vuelo = {id, ciudadSalida, horarioSalida, fechaString, ciudadDestino, horarioLlegada, fechaLlegada, aerolinea};
                 model.addRow(vuelo);
             }
 
@@ -101,6 +101,9 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        comboClase = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -115,12 +118,13 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel1.setBackground(new java.awt.Color(153, 153, 255));
+        jPanel1.setBackground(new java.awt.Color(0, 153, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(1860, 1000));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tablaInfo.setBackground(new java.awt.Color(153, 153, 255));
+        tablaInfo.setBackground(new java.awt.Color(0, 102, 204));
         tablaInfo.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        tablaInfo.setForeground(new java.awt.Color(255, 255, 255));
         tablaInfo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -132,10 +136,11 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
 
             }
         ));
-        tablaInfo.setSelectionForeground(new java.awt.Color(204, 204, 255));
+        tablaInfo.setSelectionBackground(new java.awt.Color(255, 255, 255));
+        tablaInfo.setSelectionForeground(new java.awt.Color(0, 0, 0));
         jScrollPane1.setViewportView(tablaInfo);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 700, 1211));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 690, 680));
 
         btnBuscarFecha.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         btnBuscarFecha.setText("Buscar");
@@ -144,7 +149,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
                 btnBuscarFechaActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBuscarFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 310, 160, 40));
+        jPanel1.add(btnBuscarFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 360, 230, 40));
 
         botonreservar.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         botonreservar.setText("Reservar");
@@ -153,63 +158,87 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
                 botonreservarActionPerformed(evt);
             }
         });
-        jPanel1.add(botonreservar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 180, 230, 66));
+        jPanel1.add(botonreservar, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 530, 230, 70));
 
+        inicio.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 14)); // NOI18N
         inicio.setText("VOLVER AL INICIO");
         inicio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inicioActionPerformed(evt);
             }
         });
-        jPanel1.add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(1230, 0, 230, 60));
-        jPanel1.add(choseerFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 260, 230, 40));
+        jPanel1.add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 620, 230, 70));
 
+        choseerFecha.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jPanel1.add(choseerFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 220, 230, 40));
+
+        comboDestino.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
         comboDestino.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Buenos Aires", "Cancún", "Miami", "Rio De Janeiro", " " }));
         jPanel1.add(comboDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 150, 230, 40));
 
+        comboOrigen.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
         comboOrigen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Buenos Aires", "Cancún", " " }));
         jPanel1.add(comboOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 80, 230, 40));
 
         jLabel1.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
-        jLabel1.setText("Destino");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 130, -1, -1));
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Seleccione la clase");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 270, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Origen");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 50, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 60, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Código del vuelo");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 100, -1, -1));
-        jPanel1.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 130, 240, 40));
-        jPanel1.add(spinBebes, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 300, -1, -1));
-        jPanel1.add(spinNinios, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 350, -1, -1));
-        jPanel1.add(spinMayores, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 400, -1, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 450, -1, 20));
+        jPanel1.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 480, 230, 40));
+        jPanel1.add(spinBebes, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 90, -1, -1));
+        jPanel1.add(spinNinios, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 160, -1, -1));
+        jPanel1.add(spinMayores, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 230, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Bebes menores a 2 años");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 280, -1, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 70, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Niños menores de 18 años");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 330, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 140, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Mayores de 18 años");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 380, -1, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 210, -1, -1));
+
+        jLabel2.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Destino");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 130, -1, -1));
+
+        comboClase.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
+        comboClase.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Primera Clase", "Económica" }));
+        jPanel1.add(comboClase, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 300, 230, 40));
+
+        jLabel5.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Fecha");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 200, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addContainerGap()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,6 +255,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
     private void inicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicioActionPerformed
         dispose();
         SesionIniciada si = new SesionIniciada();
+        si.setExtendedState(JFrame.MAXIMIZED_BOTH);
         si.setVisible(true);
     }//GEN-LAST:event_inicioActionPerformed
 
@@ -234,7 +264,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         Connection conn = new Conexion().estableceConexion();
 
         // Consulta SQL para obtener vuelos filtrados por origen, destino y fecha, con información del avión
-        String sql = "SELECT  vuelos.IDvuelo, vuelos.Salida, vuelos.Destino, vuelos.HorarioSalida, vuelos.Fecha, "
+        String sql = "SELECT  vuelos.precio, vuelos.IDvuelo, vuelos.Salida, vuelos.Destino, vuelos.HorarioSalida, vuelos.Fecha, "
                 + "vuelos.HorarioLlegada, vuelos.FechaLlegada, avion.Aerolinea, avion.Cantidad_pasajeros "
                 + "FROM vuelos "
                 + "JOIN avion ON vuelos.Id_avion_vuelos = avion.id "
@@ -249,6 +279,10 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
             Date selectedDate = choseerFecha.getDate();
             java.sql.Date sqlDate = new java.sql.Date(selectedDate.getTime());
 
+
+            int numBebes = (int) spinBebes.getValue();
+            int numNinios = (int) spinNinios.getValue();
+            int numMayores = (int) spinMayores.getValue();
             // Preparar la consulta SQL con parámetros
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, origen);
@@ -272,10 +306,12 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
                 Time horarioLlegada = rs.getTime("HorarioLlegada");
                 Date fechaLlegada = rs.getDate("FechaLlegada");
                 String aerolinea = rs.getString("Aerolinea");
-                int cantidadPasajeros = rs.getInt("Cantidad_pasajeros");
+                int cantidadPasajeros = rs.getInt("Cantidad_pasajeros");            
+                double precio = rs.getDouble("precio");
+                double precioTotal = calcularPrecioTotal(precio, numBebes, numNinios, numMayores); 
 
                 // Agregar datos a la tabla
-                Object[] vuelo = {salida, horarioSalida, fecha, destino, horarioLlegada, fechaLlegada, aerolinea, cantidadPasajeros};
+                Object[] vuelo = {id, salida, horarioSalida, fecha, destino, horarioLlegada, fechaLlegada, aerolinea, precioTotal};
                 model.addRow(vuelo);
             }
 
@@ -318,24 +354,34 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, mensaje);
 
                 String sql2 = "INSERT INTO reservas (vuelo_id, precio, estado, pasajeros) VALUES (?, ?, ?, ?)";
+
                 PreparedStatement pstmtInsert = conn.prepareStatement(sql2, Statement.RETURN_GENERATED_KEYS);
-                //PreparedStatement pstmtInsert = conn.prepareStatement(sql2);
+
                 pstmtInsert.setInt(1, codigoVuelo);
                 pstmtInsert.setDouble(2, precioTotal);
                 pstmtInsert.setString(3, "Pendiente");
                 pstmtInsert.setInt(4, cantPasajeros);
 
+                
                 int filasInsertadas = pstmtInsert.executeUpdate();
-
                 if (filasInsertadas > 0) {
                     ResultSet generatedKeys = pstmtInsert.getGeneratedKeys();
                     if (generatedKeys.next()) {
-                        idReserva = generatedKeys.getInt(1);
-                        JOptionPane.showMessageDialog(null, "Reserva realizada correctamente. ID de reserva: " + idReserva);
-                        IngresarPasajeros ip = new IngresarPasajeros(null, true);
-                        ip.pack(); 
-                        ip.setLocationRelativeTo(null); 
-                        ip.setVisible(true);
+                        for (int i = 0; i < cantPasajeros; i++) {
+
+                            idReserva = generatedKeys.getInt(1);
+                            if (cantPasajeros > 0) {
+                                JOptionPane.showMessageDialog(null, "Reserva realizada correctamente. ID de reserva: " + idReserva);
+                                IngresarPasajeros ip = new IngresarPasajeros(null, true);
+                                ip.pack();
+                                ip.setLocationRelativeTo(null);
+                                ip.setVisible(true);
+                            }
+                        }
+                        this.dispose();
+                        SesionIniciada si = new SesionIniciada();
+                        si.setVisible(true);
+                        setExtendedState(JFrame.MAXIMIZED_BOTH);
                     } else {
                         JOptionPane.showMessageDialog(null, "No se pudo realizar la reserva.");
                     }
@@ -355,11 +401,13 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
 
     private double calcularPrecioTotal(double precioBase, int numBebes, int numNinios, int numMayores) {
         double precioTotal = 0.0;
-
         precioTotal = precioBase * (numNinios + numMayores);
         double descuentoBebes = numBebes * (precioBase * 0.50);
         precioTotal += descuentoBebes;
-
+        String claseSeleccionada = (String) comboClase.getSelectedItem();
+        if("Primera Clase".equals(claseSeleccionada)){
+        return precioTotal * 1.5;
+        }
         return precioTotal;
     }
 
@@ -399,12 +447,15 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
     private javax.swing.JButton botonreservar;
     private javax.swing.JButton btnBuscarFecha;
     private com.toedter.calendar.JDateChooser choseerFecha;
+    private javax.swing.JComboBox<String> comboClase;
     private javax.swing.JComboBox<String> comboDestino;
     private javax.swing.JComboBox<String> comboOrigen;
     private javax.swing.JButton inicio;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
