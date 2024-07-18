@@ -6,28 +6,27 @@ import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-/**
- *
- * @author Lenovo
- */
 public class BusquedaDeVuelos extends javax.swing.JFrame {
 
-    private final DefaultTableModel model;
-
+    private DefaultTableModel model;
+    private int cantPasajeros;
+    private int codigoVuelo;
+    public int idReserva;
+   
     public BusquedaDeVuelos() {
         initComponents();
         model = new DefaultTableModel();
         tablaInfo.setModel(model);
-
+        model.addColumn("Código");
         model.addColumn("Salida");
         model.addColumn("H. Salida");
         model.addColumn("Fecha");
@@ -36,22 +35,23 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         model.addColumn("Fecha Llegada");
         model.addColumn("Aerolínea");
         model.addColumn("Cantidad pasajeros");
-        
 
         consultaTodos();
         //Acá debe estar llamado el método para inicializar el combobox
 
     }
+    
 
     //Acá hacer el método para llenar los combo box
     private void consultaTodos() {
-        String query = "SELECT vuelos.Salida, vuelos.Destino, vuelos.HorarioSalida, vuelos.Estado, vuelos.Fecha, vuelos.HorarioLlegada, vuelos.FechaLlegada, avion.Aerolinea, avion.Cantidad_pasajeros FROM vuelos JOIN avion ON vuelos.Id_avion_vuelos = avion.id WHERE DATE(Fecha) > CURDATE();";
+        String query = "SELECT vuelos.IDvuelo, vuelos.Salida, vuelos.Destino, vuelos.HorarioSalida, vuelos.Estado, vuelos.Fecha, vuelos.HorarioLlegada, vuelos.FechaLlegada, avion.Aerolinea, avion.Cantidad_pasajeros FROM vuelos JOIN avion ON vuelos.Id_avion_vuelos = avion.id WHERE DATE(Fecha) > CURDATE();";
 
         try (Connection conn = new Conexion().estableceConexion(); PreparedStatement stmt = conn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
 
             model.setRowCount(0);
 
             while (rs.next()) {
+                int id = rs.getInt("IDvuelo");
                 String ciudadSalida = rs.getString("Salida");
                 String ciudadDestino = rs.getString("Destino");
                 LocalTime horarioSalida = rs.getTime("HorarioSalida").toLocalTime();
@@ -86,15 +86,21 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaInfo = new javax.swing.JTable();
         btnBuscarFecha = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        botonreservar = new javax.swing.JButton();
         inicio = new javax.swing.JButton();
         choseerFecha = new com.toedter.calendar.JDateChooser();
         comboDestino = new javax.swing.JComboBox<>();
         comboOrigen = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        combopasajeros = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        txtCodigo = new javax.swing.JTextField();
+        spinBebes = new javax.swing.JSpinner();
+        spinNinios = new javax.swing.JSpinner();
+        spinMayores = new javax.swing.JSpinner();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -138,11 +144,16 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
                 btnBuscarFechaActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBuscarFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 270, 160, 40));
+        jPanel1.add(btnBuscarFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 310, 160, 40));
 
-        jButton6.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
-        jButton6.setText("Reservar");
-        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 350, 230, 66));
+        botonreservar.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        botonreservar.setText("Reservar");
+        botonreservar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonreservarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(botonreservar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 180, 230, 66));
 
         inicio.setText("VOLVER AL INICIO");
         inicio.addActionListener(new java.awt.event.ActionListener() {
@@ -150,8 +161,8 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
                 inicioActionPerformed(evt);
             }
         });
-        jPanel1.add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 450, 230, 60));
-        jPanel1.add(choseerFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 280, 230, 40));
+        jPanel1.add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(1230, 0, 230, 60));
+        jPanel1.add(choseerFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 260, 230, 40));
 
         comboDestino.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Buenos Aires", "Cancún", "Miami", "Rio De Janeiro", " " }));
         jPanel1.add(comboDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 150, 230, 40));
@@ -163,16 +174,29 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         jLabel1.setText("Destino");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 130, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
-        jLabel2.setText("Pasajeros");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 200, -1, -1));
-
-        combopasajeros.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "200", "300", "350" }));
-        jPanel1.add(combopasajeros, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 220, 230, 40));
-
         jLabel3.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
         jLabel3.setText("Origen");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 50, -1, -1));
+
+        jLabel8.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel8.setText("Código del vuelo");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 100, -1, -1));
+        jPanel1.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 130, 240, 40));
+        jPanel1.add(spinBebes, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 300, -1, -1));
+        jPanel1.add(spinNinios, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 350, -1, -1));
+        jPanel1.add(spinMayores, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 400, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel4.setText("Bebes menores a 2 años");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 280, -1, -1));
+
+        jLabel6.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel6.setText("Niños menores de 18 años");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 330, -1, -1));
+
+        jLabel7.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel7.setText("Mayores de 18 años");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 380, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -191,7 +215,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(34, 34, 34)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(117, 117, 117))
         );
@@ -210,7 +234,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         Connection conn = new Conexion().estableceConexion();
 
         // Consulta SQL para obtener vuelos filtrados por origen, destino y fecha, con información del avión
-        String sql = "SELECT vuelos.Salida, vuelos.Destino, vuelos.HorarioSalida, vuelos.Fecha, "
+        String sql = "SELECT  vuelos.IDvuelo, vuelos.Salida, vuelos.Destino, vuelos.HorarioSalida, vuelos.Fecha, "
                 + "vuelos.HorarioLlegada, vuelos.FechaLlegada, avion.Aerolinea, avion.Cantidad_pasajeros "
                 + "FROM vuelos "
                 + "JOIN avion ON vuelos.Id_avion_vuelos = avion.id "
@@ -240,6 +264,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
 
             // Procesar el resultado y agregar filas a la tabla
             while (rs.next()) {
+                int id = rs.getInt("IDvuelo");
                 String salida = rs.getString("Salida");
                 destino = rs.getString("Destino");
                 Time horarioSalida = rs.getTime("HorarioSalida");
@@ -259,9 +284,85 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnBuscarFechaActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void botonreservarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonreservarActionPerformed
+        try {
+
+            String codigo = txtCodigo.getText().trim();
+
+            int codigoEntero = Integer.parseInt(codigo);
+
+            Connection conn = new Conexion().estableceConexion();
+
+            String sql = "SELECT IDvuelo, precio FROM vuelos WHERE IDvuelo = ?";
+
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, codigoEntero);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                codigoVuelo = rs.getInt("IDvuelo");
+                double precio = rs.getDouble("precio");
+
+                int numBebes = (int) spinBebes.getValue();
+                int numNinios = (int) spinNinios.getValue();
+                int numMayores = (int) spinMayores.getValue();
+                cantPasajeros = numBebes + numNinios + numMayores;
+
+                double precioTotal = calcularPrecioTotal(precio, numBebes, numNinios, numMayores);
+
+                String mensaje = "Cantidad de bebés: " + numBebes + " (50% off)\n"
+                        + "Cantidad de niños: " + numNinios + "\n"
+                        + "Cantidad de adultos: " + numMayores + "\n\n"
+                        + "El precio total es: $" + precioTotal;
+
+                JOptionPane.showMessageDialog(null, mensaje);
+
+                String sql2 = "INSERT INTO reservas (vuelo_id, precio, estado, pasajeros) VALUES (?, ?, ?, ?)";
+                PreparedStatement pstmtInsert = conn.prepareStatement(sql2, Statement.RETURN_GENERATED_KEYS);
+                //PreparedStatement pstmtInsert = conn.prepareStatement(sql2);
+                pstmtInsert.setInt(1, codigoVuelo);
+                pstmtInsert.setDouble(2, precioTotal);
+                pstmtInsert.setString(3, "Pendiente");
+                pstmtInsert.setInt(4, cantPasajeros);
+
+                int filasInsertadas = pstmtInsert.executeUpdate();
+
+                if (filasInsertadas > 0) {
+                    ResultSet generatedKeys = pstmtInsert.getGeneratedKeys();
+                    if (generatedKeys.next()) {
+                        idReserva = generatedKeys.getInt(1);
+                        JOptionPane.showMessageDialog(null, "Reserva realizada correctamente. ID de reserva: " + idReserva);
+                        IngresarPasajeros ip = new IngresarPasajeros(null, true);
+                        ip.pack(); 
+                        ip.setLocationRelativeTo(null); 
+                        ip.setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se pudo realizar la reserva.");
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró un vuelo con el código " + codigo);
+                }
+
+                conn.close();
+
+            }
+        } catch (NumberFormatException | SQLException ex) {
+            Logger.getLogger(BusquedaDeVuelos.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error al buscar el vuelo: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_botonreservarActionPerformed
+
+    private double calcularPrecioTotal(double precioBase, int numBebes, int numNinios, int numMayores) {
+        double precioTotal = 0.0;
+
+        precioTotal = precioBase * (numNinios + numMayores);
+        double descuentoBebes = numBebes * (precioBase * 0.50);
+        precioTotal += descuentoBebes;
+
+        return precioTotal;
+    }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -295,19 +396,25 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonreservar;
     private javax.swing.JButton btnBuscarFecha;
     private com.toedter.calendar.JDateChooser choseerFecha;
     private javax.swing.JComboBox<String> comboDestino;
     private javax.swing.JComboBox<String> comboOrigen;
-    private javax.swing.JComboBox<String> combopasajeros;
     private javax.swing.JButton inicio;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSpinner spinBebes;
+    private javax.swing.JSpinner spinMayores;
+    private javax.swing.JSpinner spinNinios;
     private javax.swing.JTable tablaInfo;
+    private javax.swing.JTextField txtCodigo;
     // End of variables declaration//GEN-END:variables
 }
