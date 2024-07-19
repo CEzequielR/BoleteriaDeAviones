@@ -41,7 +41,6 @@ public class Autenticacion extends javax.swing.JFrame {
         label3 = new java.awt.Label();
         label4 = new java.awt.Label();
         txtApellidoRegistro = new javax.swing.JTextField();
-        label5 = new java.awt.Label();
         txtEmailRegistro = new javax.swing.JTextField();
         label6 = new java.awt.Label();
         btnRegistro = new javax.swing.JButton();
@@ -50,6 +49,9 @@ public class Autenticacion extends javax.swing.JFrame {
         txtconfirmarcontraseña = new javax.swing.JPasswordField();
         labelcontrasenia = new javax.swing.JLabel();
         labelcorreo = new javax.swing.JLabel();
+        txtdni = new javax.swing.JTextField();
+        label7 = new java.awt.Label();
+        label8 = new java.awt.Label();
         panelInicioSesion = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
@@ -100,11 +102,6 @@ public class Autenticacion extends javax.swing.JFrame {
         txtApellidoRegistro.setBorder(javax.swing.BorderFactory.createCompoundBorder());
         jPanel6.add(txtApellidoRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 50, 150, 30));
 
-        label5.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
-        label5.setForeground(new java.awt.Color(255, 255, 255));
-        label5.setText("Correo Electrónico");
-        jPanel6.add(label5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
-
         txtEmailRegistro.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         txtEmailRegistro.setForeground(new java.awt.Color(102, 102, 102));
         txtEmailRegistro.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -134,6 +131,17 @@ public class Autenticacion extends javax.swing.JFrame {
         jPanel6.add(txtconfirmarcontraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, 160, 30));
         jPanel6.add(labelcontrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 340, 30));
         jPanel6.add(labelcorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 330, -1));
+        jPanel6.add(txtdni, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 150, 150, 30));
+
+        label7.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        label7.setForeground(new java.awt.Color(255, 255, 255));
+        label7.setText("Dni");
+        jPanel6.add(label7, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 110, -1, -1));
+
+        label8.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        label8.setForeground(new java.awt.Color(255, 255, 255));
+        label8.setText("Correo Electrónico");
+        jPanel6.add(label8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
 
         javax.swing.GroupLayout panelRegistroLayout = new javax.swing.GroupLayout(panelRegistro);
         panelRegistro.setLayout(panelRegistroLayout);
@@ -371,7 +379,7 @@ public class Autenticacion extends javax.swing.JFrame {
         return correo.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}");
     }
 
-    private boolean registrarUsuario(String nombre, String apellido, String correo, String contrasenia) {
+    private boolean registrarUsuario(int dni, String nombre, String apellido, String correo, String contrasenia) {
         if (usuarioYaRegistrado(correo)) {
             JOptionPane.showMessageDialog(null, "El correo electrónico ya está registrado");
             return false;
@@ -380,12 +388,13 @@ public class Autenticacion extends javax.swing.JFrame {
         Connection conn = new Conexion().estableceConexion();
 
         if (conn != null) {
-            String sql = "INSERT INTO usuarios (nombre, apellido, correo, contrasenia) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO usuarios (idusuarios, nombre, apellido, correo, contrasenia) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setString(1, nombre);
-                pstmt.setString(2, apellido);
-                pstmt.setString(3, correo);
-                pstmt.setString(4, contrasenia);
+                pstmt.setInt(1, dni);
+                pstmt.setString(2, nombre);
+                pstmt.setString(3, apellido);
+                pstmt.setString(4, correo);
+                pstmt.setString(5, contrasenia);
 
                 int rowsAffected = pstmt.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Usuario registrado correctamente");
@@ -451,6 +460,7 @@ public class Autenticacion extends javax.swing.JFrame {
 
             Transport transport = session.getTransport("smtp");
 
+            int dni = Integer.parseInt(txtdni.getText());       
             String nombre = txtNombreRegistro.getText();
             String apellido = txtApellidoRegistro.getText();
             String correo = txtEmailRegistro.getText();
@@ -487,7 +497,7 @@ public class Autenticacion extends javax.swing.JFrame {
 
             // Si llega aquí, el correo se envió correctamente
             JOptionPane.showMessageDialog(null, "Correo enviado correctamente a: " + correoReceptor);
-            registrarUsuario(nombre,apellido,correo,contrasenia);
+            registrarUsuario(dni, nombre,apellido,correo,contrasenia);
             //JOptionPane.showMessageDialog(null, "Usuario registrado correctamente");
 
             SesionIniciada si = new SesionIniciada();
@@ -556,8 +566,9 @@ public class Autenticacion extends javax.swing.JFrame {
     private java.awt.Label label2;
     private java.awt.Label label3;
     private java.awt.Label label4;
-    private java.awt.Label label5;
     private java.awt.Label label6;
+    private java.awt.Label label7;
+    private java.awt.Label label8;
     private javax.swing.JLabel labelOlvidasteContraseña;
     private javax.swing.JLabel labelcontrasenia;
     private javax.swing.JLabel labelcorreo;
@@ -571,5 +582,6 @@ public class Autenticacion extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtconfirmarcontraseña;
     private javax.swing.JPasswordField txtcontrasenia;
     private javax.swing.JPasswordField txtcontraseñaregistro;
+    private javax.swing.JTextField txtdni;
     // End of variables declaration//GEN-END:variables
 }

@@ -10,8 +10,17 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -22,6 +31,8 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
     private int cantPasajeros;
     private int codigoVuelo;
     public int idReserva;
+    public String correoReceptor;
+    private int dni;
 
     public BusquedaDeVuelos() {
         initComponents();
@@ -94,7 +105,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        txtCodigo = new javax.swing.JTextField();
+        txtdni = new javax.swing.JTextField();
         spinBebes = new javax.swing.JSpinner();
         spinNinios = new javax.swing.JSpinner();
         spinMayores = new javax.swing.JSpinner();
@@ -104,6 +115,8 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         comboClase = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        txtCodigo1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -137,7 +150,6 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
             }
         ));
         tablaInfo.setSelectionBackground(new java.awt.Color(255, 255, 255));
-        tablaInfo.setSelectionForeground(new java.awt.Color(0, 0, 0));
         jScrollPane1.setViewportView(tablaInfo);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 690, 680));
@@ -158,7 +170,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
                 botonreservarActionPerformed(evt);
             }
         });
-        jPanel1.add(botonreservar, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 530, 230, 70));
+        jPanel1.add(botonreservar, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 550, 230, 70));
 
         inicio.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 14)); // NOI18N
         inicio.setText("VOLVER AL INICIO");
@@ -167,7 +179,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
                 inicioActionPerformed(evt);
             }
         });
-        jPanel1.add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 620, 230, 70));
+        jPanel1.add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 630, 230, 70));
 
         choseerFecha.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
         jPanel1.add(choseerFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 220, 230, 40));
@@ -192,9 +204,15 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("Código del vuelo");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 450, -1, 20));
-        jPanel1.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 480, 230, 40));
+        jLabel8.setText("Dni ");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 480, 100, 20));
+
+        txtdni.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtdniActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtdni, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 500, 230, 40));
         jPanel1.add(spinBebes, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 90, -1, -1));
         jPanel1.add(spinNinios, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 160, -1, -1));
         jPanel1.add(spinMayores, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 230, -1, -1));
@@ -227,6 +245,12 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Fecha");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 200, -1, -1));
+
+        jLabel9.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("Código del vuelo");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 420, -1, 20));
+        jPanel1.add(txtCodigo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 440, 230, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -279,7 +303,6 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
             Date selectedDate = choseerFecha.getDate();
             java.sql.Date sqlDate = new java.sql.Date(selectedDate.getTime());
 
-
             int numBebes = (int) spinBebes.getValue();
             int numNinios = (int) spinNinios.getValue();
             int numMayores = (int) spinMayores.getValue();
@@ -306,9 +329,9 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
                 Time horarioLlegada = rs.getTime("HorarioLlegada");
                 Date fechaLlegada = rs.getDate("FechaLlegada");
                 String aerolinea = rs.getString("Aerolinea");
-                int cantidadPasajeros = rs.getInt("Cantidad_pasajeros");            
+                int cantidadPasajeros = rs.getInt("Cantidad_pasajeros");
                 double precio = rs.getDouble("precio");
-                double precioTotal = calcularPrecioTotal(precio, numBebes, numNinios, numMayores); 
+                double precioTotal = calcularPrecioTotal(precio, numBebes, numNinios, numMayores);
 
                 // Agregar datos a la tabla
                 Object[] vuelo = {id, salida, horarioSalida, fecha, destino, horarioLlegada, fechaLlegada, aerolinea, precioTotal};
@@ -320,13 +343,33 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnBuscarFechaActionPerformed
 
+    private boolean validarSpinners() {
+        int bebes = (int) spinBebes.getValue();
+        int ninios = (int) spinNinios.getValue();
+        int mayores = (int) spinMayores.getValue();
+
+        if (bebes > 0 && ninios >= 0 && mayores >= 0) {
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar al menos un bebé y asegurarse que otros valores sean mayores o iguales a cero.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+
     private void botonreservarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonreservarActionPerformed
         try {
 
-            String codigo = txtCodigo.getText().trim();
+            if (!validarSpinners()) {
+                return;
+            }
+
+            String codigo = txtCodigo1.getText().trim();
 
             int codigoEntero = Integer.parseInt(codigo);
 
+            //String dni = txtdni.getText().trim();
+            //int dniV = Integer.parseInt(dni);
             Connection conn = new Conexion().estableceConexion();
 
             String sql = "SELECT IDvuelo, precio FROM vuelos WHERE IDvuelo = ?";
@@ -353,7 +396,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
 
                 JOptionPane.showMessageDialog(null, mensaje);
 
-                String sql2 = "INSERT INTO reservas (vuelo_id, precio, estado, pasajeros) VALUES (?, ?, ?, ?)";
+                String sql2 = "INSERT INTO reservas (vuelo_id, precio, estado, pasajeros, usuarios_id) VALUES (?, ?, ?, ?, ?)";
 
                 PreparedStatement pstmtInsert = conn.prepareStatement(sql2, Statement.RETURN_GENERATED_KEYS);
 
@@ -361,8 +404,10 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
                 pstmtInsert.setDouble(2, precioTotal);
                 pstmtInsert.setString(3, "Pendiente");
                 pstmtInsert.setInt(4, cantPasajeros);
+                dni = Integer.parseInt(txtdni.getText().trim());
+                pstmtInsert.setInt(5, dni);
+                //pstmtInsert.setInt(5, dni.getText().trim());
 
-                
                 int filasInsertadas = pstmtInsert.executeUpdate();
                 if (filasInsertadas > 0) {
                     ResultSet generatedKeys = pstmtInsert.getGeneratedKeys();
@@ -371,12 +416,19 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
 
                             idReserva = generatedKeys.getInt(1);
                             if (cantPasajeros > 0) {
-                                JOptionPane.showMessageDialog(null, "Reserva realizada correctamente. ID de reserva: " + idReserva);
+                                JOptionPane.showMessageDialog(null, "Reserva realizada correctamente. ID de reserva:" + idReserva);
+                                enviarCorreoReserva();
                                 IngresarPasajeros ip = new IngresarPasajeros(null, true);
                                 ip.pack();
                                 ip.setLocationRelativeTo(null);
                                 ip.setVisible(true);
+
                             }
+                            txtCodigo1.setText("");
+                            txtdni.setText("");
+                            spinBebes.setValue(0);
+                            spinNinios.setValue(0);
+                            spinMayores.setValue(0);
                         }
                         this.dispose();
                         SesionIniciada si = new SesionIniciada();
@@ -399,43 +451,63 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botonreservarActionPerformed
 
+    private void txtdniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtdniActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtdniActionPerformed
+
     private double calcularPrecioTotal(double precioBase, int numBebes, int numNinios, int numMayores) {
         double precioTotal = 0.0;
         precioTotal = precioBase * (numNinios + numMayores);
         double descuentoBebes = numBebes * (precioBase * 0.50);
         precioTotal += descuentoBebes;
         String claseSeleccionada = (String) comboClase.getSelectedItem();
-        if("Primera Clase".equals(claseSeleccionada)){
-        return precioTotal * 1.5;
+        if ("Primera Clase".equals(claseSeleccionada)) {
+            return precioTotal * 1.5;
         }
         return precioTotal;
     }
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BusquedaDeVuelos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BusquedaDeVuelos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BusquedaDeVuelos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BusquedaDeVuelos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void enviarCorreoReserva() {
 
-        /* Create and display the form */
+        String correoRemitente = "aerolineasezisina@gmail.com";
+        String passwordRemitente = "t p w x c n f r re c a s i t i";
+        correoReceptor = txtdni.getText().trim();
+        String asunto = "RESERVA";
+        String cuerpoMensaje = "Estimado cliente, el token con el que podrá abonar y verificar el estado de su reserva es el siguiente: " + this.idReserva;
+
+        try {
+            Properties props = new Properties();
+            props.setProperty("mail.smtp.host", "smtp.gmail.com");
+            props.setProperty("mail.smtp.starttls.enable", "true");
+            props.setProperty("mail.smtp.port", "587");
+            props.setProperty("mail.smtp.auth", "true");
+
+            Session session = Session.getInstance(props, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(correoRemitente, passwordRemitente);
+                }
+            });
+
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(correoRemitente));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoReceptor));
+            message.setSubject(asunto);
+
+            message.setText(cuerpoMensaje);
+
+            Transport.send(message);
+
+            JOptionPane.showMessageDialog(null, "Correo enviado correctamente a: " + correoReceptor);
+
+        } catch (MessagingException ex) {
+            Logger.getLogger(Autenticacion.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error al enviar el correo: " + ex.getMessage());
+        }
+    }
+
+    public static void main(String args[]) {
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new BusquedaDeVuelos().setVisible(true);
@@ -459,6 +531,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -466,6 +539,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
     private javax.swing.JSpinner spinMayores;
     private javax.swing.JSpinner spinNinios;
     private javax.swing.JTable tablaInfo;
-    private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextField txtCodigo1;
+    private javax.swing.JTextField txtdni;
     // End of variables declaration//GEN-END:variables
 }
