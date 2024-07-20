@@ -46,6 +46,7 @@ public class GestionDeReservas extends javax.swing.JFrame {
         txtDni = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         botonbuscar = new javax.swing.JButton();
+        botonasiento = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -123,6 +124,14 @@ public class GestionDeReservas extends javax.swing.JFrame {
             }
         });
         jPanel1.add(botonbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 350, 250, 30));
+
+        botonasiento.setText("ELEGIR ASIENTO");
+        botonasiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonasientoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(botonasiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 390, 170, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -207,6 +216,12 @@ public class GestionDeReservas extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDniActionPerformed
 
+    private void botonasientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonasientoActionPerformed
+        dispose();
+        CompraDePasajes cp = new CompraDePasajes();
+        cp.setVisible(true);
+    }//GEN-LAST:event_botonasientoActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -240,6 +255,7 @@ public class GestionDeReservas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonasiento;
     private javax.swing.JButton botonbuscar;
     private javax.swing.JButton botoncancelar;
     private javax.swing.JButton botonpagar;

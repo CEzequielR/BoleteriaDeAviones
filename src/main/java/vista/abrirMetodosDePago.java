@@ -125,25 +125,27 @@ public class abrirMetodosDePago extends javax.swing.JFrame {
     }//GEN-LAST:event_combopagosActionPerformed
 
     private void botonpagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonpagarActionPerformed
-        String metodoPagoSeleccionado = (String) combopagos.getSelectedItem();
 
-        switch (metodoPagoSeleccionado) {
-            case "MERCADO PAGO":
-                dispose();
-                MercadoPago mp = new MercadoPago(this, rootPaneCheckingEnabled);
-                mp.setVisible(true);
-                break;
-            case "Efectivo":
-                dispose();
-                Efectivo e = new Efectivo(this, rootPaneCheckingEnabled);
-                e.setVisible(true);
-                break;
-            case "Tarjeta":
-                dispose();
-                Tarjeta t = new Tarjeta(this, rootPaneCheckingEnabled);
-                t.setVisible(true);
-                break;
-        }
+            String metodoPagoSeleccionado = (String) combopagos.getSelectedItem();
+
+            switch (metodoPagoSeleccionado) {
+                case "Mercado Pago":
+                    dispose();
+                    MercadoPago mp = new MercadoPago(this, rootPaneCheckingEnabled);
+                    mp.setVisible(true);
+                    break;
+                case "Efectivo":
+                    dispose();
+                    Efectivo e = new Efectivo(this, rootPaneCheckingEnabled);
+                    e.setVisible(true);
+                    break;
+                case "Tarjeta":
+                    dispose();
+                    Tarjeta t = new Tarjeta(this, rootPaneCheckingEnabled);
+                    t.setVisible(true);
+                    break;
+            }
+        
     }//GEN-LAST:event_botonpagarActionPerformed
 
     private void botonverificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonverificarActionPerformed

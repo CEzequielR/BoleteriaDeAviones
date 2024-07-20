@@ -117,6 +117,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtCodigo1 = new javax.swing.JTextField();
+        botonasiento = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -251,6 +252,14 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         jLabel9.setText("Código del vuelo");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 420, -1, 20));
         jPanel1.add(txtCodigo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 440, 230, 40));
+
+        botonasiento.setText("ELEGIR ASIENTO");
+        botonasiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonasientoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(botonasiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 320, 170, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -417,7 +426,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
                             idReserva = generatedKeys.getInt(1);
                             if (cantPasajeros > 0) {
                                 JOptionPane.showMessageDialog(null, "Reserva realizada correctamente. ID de reserva:" + idReserva);
-                                enviarCorreoReserva();
+                                //enviarCorreoReserva();
                                 IngresarPasajeros ip = new IngresarPasajeros(null, true);
                                 ip.pack();
                                 ip.setLocationRelativeTo(null);
@@ -455,6 +464,12 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtdniActionPerformed
 
+    private void botonasientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonasientoActionPerformed
+        dispose();
+        CompraDePasajes cp = new CompraDePasajes();
+        cp.setVisible(true);
+    }//GEN-LAST:event_botonasientoActionPerformed
+
     private double calcularPrecioTotal(double precioBase, int numBebes, int numNinios, int numMayores) {
         double precioTotal = 0.0;
         precioTotal = precioBase * (numNinios + numMayores);
@@ -467,7 +482,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
         return precioTotal;
     }
 
-    private void enviarCorreoReserva() {
+   /* private void enviarCorreoReserva() {
 
         String correoRemitente = "aerolineasezisina@gmail.com";
         String passwordRemitente = "t p w x c n f r re c a s i t i";
@@ -504,7 +519,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
             Logger.getLogger(Autenticacion.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Error al enviar el correo: " + ex.getMessage());
         }
-    }
+    }*/
 
     public static void main(String args[]) {
 
@@ -516,6 +531,7 @@ public class BusquedaDeVuelos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonasiento;
     private javax.swing.JButton botonreservar;
     private javax.swing.JButton btnBuscarFecha;
     private com.toedter.calendar.JDateChooser choseerFecha;

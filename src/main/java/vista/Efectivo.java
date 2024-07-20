@@ -6,8 +6,20 @@ package vista;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.JOptionPane;
 
 /**
@@ -16,9 +28,8 @@ import javax.swing.JOptionPane;
  */
 public class Efectivo extends javax.swing.JDialog {
 
-    /**
-     * Creates new form Efectivo
-     */
+    public String correoReceptor;
+
     public Efectivo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -157,8 +168,7 @@ public class Efectivo extends javax.swing.JDialog {
         int numeroRandom = 100000 + random.nextInt(900000);
         obtenerCodigoParaPago.setText(Integer.toString(numeroRandom));
         labelTexto.setText("Acércate al Rapipago o PagoFácil más cercano y dictales este número para completar tu pago.");
-                
-
+        enviarCorreoEfectivo();
     }//GEN-LAST:event_btnGenerarPagoActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
@@ -167,15 +177,14 @@ public class Efectivo extends javax.swing.JDialog {
         cambiarEstado();
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
-public void cambiarEstado(){
-String sql = "UPDATE reservas r " +
-                     "JOIN usuarios u ON r.usuarios_id = u.idusuarios " +
-                     "SET r.estado = 'Pagado' " +
-                     "WHERE u.idusuarios = ?";
+    public void cambiarEstado() {
+        String sql = "UPDATE reservas r "
+                + "JOIN usuarios u ON r.usuarios_id = u.idusuarios "
+                + "SET r.estado = 'Pagado' "
+                + "WHERE u.idusuarios = ?";
 
         Conexion conexion = new Conexion();
-        try (Connection conn = conexion.estableceConexion();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = conexion.estableceConexion(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             int usuarioId;
             try {
                 usuarioId = Integer.parseInt(txtDni.getText());
@@ -197,11 +206,89 @@ String sql = "UPDATE reservas r " +
             e.printStackTrace();
             System.out.println("Error al actualizar el estado: " + e.getMessage());
         }
-}
+    }
 
-    /**
-     * @param args the command line arguments
-     */
+    private void enviarCorreoEfectivo() {
+        String correoRemitente = "aerolineasezisina@gmail.com";
+        String passwordRemitente = "t p w x c n f r re c a s i t i";
+        correoReceptor = txtDni.getText().trim();
+
+        String query = "SELECT reservas.id, reservas.pasajeros, reservas.precio, vuelos.Salida, vuelos.Destino, vuelos.Fecha, vuelos.HorarioSalida, vuelos.HorarioLlegada, usuarios.correo "
+                + "FROM reservas "
+                + "JOIN usuarios ON reservas.usuarios_id = usuarios.idusuarios "
+                + "JOIN vuelos ON reservas.vuelo_id = vuelos.IDvuelo "
+                + "WHERE usuarios.idusuarios = ?";
+
+        String asunto = "DETALLES DE SU RESERVA";
+        StringBuilder cuerpoMensaje = new StringBuilder();
+        cuerpoMensaje.append("Estimado cliente,\n\n");
+        cuerpoMensaje.append("Aquí están los detalles de su reserva:\n\n");
+
+        try (Connection conn = new Conexion().estableceConexion(); PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, correoReceptor);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    cuerpoMensaje.append("Reserva: ").append(rs.getInt("id")).append("\n");
+                    cuerpoMensaje.append("Pasajeros: ").append(rs.getString("pasajeros")).append("\n");
+                    cuerpoMensaje.append("Precio: $").append(rs.getDouble("precio")).append("\n");
+                    cuerpoMensaje.append("Salida: ").append(rs.getString("salida")).append("\n");
+                    cuerpoMensaje.append("Destino: ").append(rs.getString("destino")).append("\n");
+                    cuerpoMensaje.append("Fecha: ").append(rs.getString("fecha")).append("\n");
+                    cuerpoMensaje.append("Horario de Salida: ").append(rs.getString("horarioSalida")).append("\n");
+                    cuerpoMensaje.append("Horario de Llegada: ").append(rs.getString("horarioLlegada")).append("\n\n");
+
+                    // Obtener el correo del usuario
+                    String correoReceptor = rs.getString("correo");
+
+                    // Agregar más información si es necesario
+                    cuerpoMensaje.append("Gracias por elegir nuestra aerolínea.");
+
+                    enviarCorreo(correoRemitente, passwordRemitente, correoReceptor, asunto, cuerpoMensaje.toString());
+
+                    JOptionPane.showMessageDialog(null, "Correo enviado correctamente a: " + correoReceptor);
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró ninguna reserva asociada al DNI proporcionado.");
+                }
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Autenticacion.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error al obtener los detalles de la reserva: " + ex.getMessage());
+        }
+    }
+
+    private void enviarCorreo(String correoRemitente, String passwordRemitente, String correoReceptor, String asunto, String cuerpoMensaje) {
+        try {
+            Properties props = new Properties();
+            props.setProperty("mail.smtp.host", "smtp.gmail.com");
+            props.setProperty("mail.smtp.starttls.enable", "true");
+            props.setProperty("mail.smtp.port", "587");
+            props.setProperty("mail.smtp.auth", "true");
+
+            Session session = Session.getInstance(props, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(correoRemitente, passwordRemitente);
+                }
+            });
+
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(correoRemitente));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoReceptor));
+            message.setSubject(asunto);
+
+            message.setText(cuerpoMensaje);
+
+            Transport.send(message);
+
+        } catch (MessagingException ex) {
+            Logger.getLogger(Autenticacion.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error al enviar el correo: " + ex.getMessage());
+        }
+    }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
