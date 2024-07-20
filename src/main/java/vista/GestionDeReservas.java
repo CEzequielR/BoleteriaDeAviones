@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -17,15 +19,16 @@ public class GestionDeReservas extends javax.swing.JFrame {
         model = new DefaultTableModel();
         jTable1.setModel(model);
                
-        model.addColumn("id");
-        model.addColumn("nombre");
-        model.addColumn("apellido");
-        model.addColumn("Salida");
+        model.addColumn("CódigoReserva");
+        model.addColumn("Nombre");
+        model.addColumn("Apellido");
+        model.addColumn("Origen");
         model.addColumn("Destino");
-        model.addColumn("fecha");
-        model.addColumn("horarioSalida");
-        model.addColumn("estado");
-        model.addColumn("pasajeros");
+        model.addColumn("Fecha");
+        model.addColumn("Horario");
+        model.addColumn("Estado");
+        model.addColumn("Pasajes");
+
         
         
     }
@@ -40,12 +43,14 @@ public class GestionDeReservas extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         botonpagar = new javax.swing.JButton();
         botoncancelar = new javax.swing.JButton();
-        txtdni = new javax.swing.JTextField();
+        txtDni = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         botonbuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(0, 153, 255));
+        jPanel1.setForeground(new java.awt.Color(0, 153, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         inicio.setText("VOLVER AL INICIO");
@@ -56,6 +61,8 @@ public class GestionDeReservas extends javax.swing.JFrame {
         });
         jPanel1.add(inicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(1113, 842, 190, 52));
 
+        jTable1.setBackground(new java.awt.Color(51, 204, 255));
+        jTable1.setForeground(new java.awt.Color(255, 255, 255));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -67,37 +74,55 @@ public class GestionDeReservas extends javax.swing.JFrame {
 
             }
         ));
+        jTable1.setSelectionBackground(new java.awt.Color(0, 0, 153));
+        jTable1.setSelectionForeground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setViewportView(jTable1);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 550, 490));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 1200, 220));
 
-        botonpagar.setText("PAGAR RESERVA");
+        botonpagar.setBackground(new java.awt.Color(0, 255, 0));
+        botonpagar.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        botonpagar.setForeground(new java.awt.Color(255, 255, 255));
+        botonpagar.setText("Pagar Reservas");
         botonpagar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonpagarActionPerformed(evt);
             }
         });
-        jPanel1.add(botonpagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 200, 160, 40));
+        jPanel1.add(botonpagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 280, 300, 70));
 
-        botoncancelar.setText("CANCELAR RESERVA");
+        botoncancelar.setBackground(new java.awt.Color(255, 0, 0));
+        botoncancelar.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        botoncancelar.setForeground(new java.awt.Color(255, 255, 255));
+        botoncancelar.setText("Cancelar Vuelo");
         botoncancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botoncancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(botoncancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 250, 160, 40));
-        jPanel1.add(txtdni, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 60, 140, 30));
+        jPanel1.add(botoncancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 280, 300, 70));
 
-        jLabel1.setText("Dni:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 40, 90, -1));
+        txtDni.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 14)); // NOI18N
+        txtDni.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDniActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 310, 250, 30));
 
-        botonbuscar.setText("BUSCAR RESERVA");
+        jLabel1.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Ingrese DNI para visualizar sus reservas");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 280, 380, -1));
+
+        botonbuscar.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 14)); // NOI18N
+        botonbuscar.setText("Buscar Reservas");
         botonbuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonbuscarActionPerformed(evt);
             }
         });
-        jPanel1.add(botonbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 100, 140, 40));
+        jPanel1.add(botonbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 350, 250, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -120,18 +145,18 @@ public class GestionDeReservas extends javax.swing.JFrame {
     }//GEN-LAST:event_inicioActionPerformed
 
     private void botonpagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonpagarActionPerformed
-       dispose();
        abrirMetodosDePago amp = new abrirMetodosDePago();
        amp.setVisible(true);
     }//GEN-LAST:event_botonpagarActionPerformed
 
     private void botoncancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoncancelarActionPerformed
-
+       CancelarVuelo can1 = new CancelarVuelo();
+       can1.setVisible(true);
     }//GEN-LAST:event_botoncancelarActionPerformed
 
-    private void botonbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonbuscarActionPerformed
+    public void actualizarTabla(){
         try {
-            int dni = Integer.parseInt(txtdni.getText().trim());
+            int dni = Integer.parseInt(txtDni.getText().trim());
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             String query = "SELECT reservas.id, usuarios.nombre, usuarios.apellido, vuelos.Salida, vuelos.Destino, vuelos.Fecha, vuelos.HorarioSalida, reservas.estado, reservas.pasajeros "
                     + "FROM reservas "
@@ -173,7 +198,14 @@ public class GestionDeReservas extends javax.swing.JFrame {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Por favor, ingrese un DNI válido.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    private void botonbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonbuscarActionPerformed
+        actualizarTabla();
     }//GEN-LAST:event_botonbuscarActionPerformed
+
+    private void txtDniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDniActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDniActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -216,6 +248,6 @@ public class GestionDeReservas extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txtdni;
+    private javax.swing.JTextField txtDni;
     // End of variables declaration//GEN-END:variables
 }

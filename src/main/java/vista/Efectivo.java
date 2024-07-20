@@ -4,6 +4,12 @@
  */
 package vista;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Random;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Monica Valenzuela
@@ -28,30 +34,170 @@ public class Efectivo extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txtDni = new javax.swing.JTextField();
+        btnGenerarPago = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        obtenerCodigoParaPago = new javax.swing.JTextPane();
+        btnVolver = new javax.swing.JButton();
+        labelTexto = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel1.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 153, 255));
+        jLabel1.setText("Ingrese su dni");
+
+        txtDni.setBackground(new java.awt.Color(255, 255, 255));
+        txtDni.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        txtDni.setForeground(new java.awt.Color(0, 102, 255));
+        txtDni.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        btnGenerarPago.setBackground(new java.awt.Color(0, 153, 255));
+        btnGenerarPago.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 14)); // NOI18N
+        btnGenerarPago.setForeground(new java.awt.Color(255, 255, 255));
+        btnGenerarPago.setText("Generar pago");
+        btnGenerarPago.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarPagoActionPerformed(evt);
+            }
+        });
+
+        obtenerCodigoParaPago.setBackground(new java.awt.Color(255, 255, 255));
+        obtenerCodigoParaPago.setBorder(null);
+        obtenerCodigoParaPago.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 48)); // NOI18N
+        obtenerCodigoParaPago.setForeground(new java.awt.Color(255, 0, 0));
+        jScrollPane1.setViewportView(obtenerCodigoParaPago);
+
+        btnVolver.setBackground(new java.awt.Color(0, 102, 255));
+        btnVolver.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 14)); // NOI18N
+        btnVolver.setForeground(new java.awt.Color(255, 255, 255));
+        btnVolver.setText("Volver al inicio");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
+
+        labelTexto.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 12)); // NOI18N
+        labelTexto.setForeground(new java.awt.Color(0, 153, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(89, 89, 89))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(txtDni, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(31, 31, 31)
+                                .addComponent(btnGenerarPago))
+                            .addComponent(jLabel1)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(123, 123, 123)
+                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(labelTexto, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(38, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(99, 99, 99)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtDni, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGenerarPago, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(51, 51, 51)
+                .addComponent(labelTexto, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46)
+                .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 839, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGap(0, 388, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 538, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnGenerarPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarPagoActionPerformed
+        // TODO add your handling code here:
+        Random random = new Random();
+        int numeroRandom = 100000 + random.nextInt(900000);
+        obtenerCodigoParaPago.setText(Integer.toString(numeroRandom));
+        labelTexto.setText("Acércate al Rapipago o PagoFácil más cercano y dictales este número para completar tu pago.");
+                
+
+    }//GEN-LAST:event_btnGenerarPagoActionPerformed
+
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(null, "Una hora mas tarde, la persona fue a pagar la reserva y por lo tanto quedó aprobado el pago.");
+        cambiarEstado();
+        this.dispose();
+    }//GEN-LAST:event_btnVolverActionPerformed
+public void cambiarEstado(){
+String sql = "UPDATE reservas r " +
+                     "JOIN usuarios u ON r.usuarios_id = u.idusuarios " +
+                     "SET r.estado = 'Pagado' " +
+                     "WHERE u.idusuarios = ?";
+
+        Conexion conexion = new Conexion();
+        try (Connection conn = conexion.estableceConexion();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            int usuarioId;
+            try {
+                usuarioId = Integer.parseInt(txtDni.getText());
+            } catch (NumberFormatException e) {
+                System.out.println("DNI inválido: " + txtDni.getText());
+                return;
+            }
+
+            pstmt.setInt(1, usuarioId);
+
+            int filasActualizadas = pstmt.executeUpdate();
+            if (filasActualizadas > 0) {
+                System.out.println("Estado actualizado correctamente.");
+            } else {
+                System.out.println("No se encontró ningún registro con el ID de usuario proporcionado.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error al actualizar el estado: " + e.getMessage());
+        }
+}
 
     /**
      * @param args the command line arguments
@@ -96,6 +242,14 @@ public class Efectivo extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGenerarPago;
+    private javax.swing.JButton btnVolver;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel labelTexto;
+    private javax.swing.JTextPane obtenerCodigoParaPago;
+    private javax.swing.JTextField txtDni;
     // End of variables declaration//GEN-END:variables
 }

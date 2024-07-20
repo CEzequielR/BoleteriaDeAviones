@@ -104,11 +104,13 @@ CREATE TABLE `pasajeros` (
   `nombre` varchar(45) DEFAULT NULL,
   `apellido` varchar(45) DEFAULT NULL,
   `dni` int DEFAULT NULL,
-  `usuario_id` int DEFAULT NULL,
+  `fechaDeNacimiento` date DEFAULT NULL,
+  `reserva_id` int DEFAULT NULL,
+  `numeroDePasaporte` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `usuarios_pasajeros_idx` (`usuario_id`),
-  CONSTRAINT `usuarios_pasajeros` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`idusuarios`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `reserva_pasajero_idx` (`reserva_id`),
+  CONSTRAINT `reserva_pasajero` FOREIGN KEY (`reserva_id`) REFERENCES `reservas` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -117,6 +119,7 @@ CREATE TABLE `pasajeros` (
 
 LOCK TABLES `pasajeros` WRITE;
 /*!40000 ALTER TABLE `pasajeros` DISABLE KEYS */;
+INSERT INTO `pasajeros` VALUES (11,'Eze','Roldán',43434333,'2003-07-26',11,'A12312312'),(12,'Ezequiel','Roldán',43077249,'2011-07-28',12,'A123123'),(13,'Lusina','Gomez',4409232,'2008-07-27',12,'A129939'),(14,'EzequieL','Roldan',4312124,'2015-07-18',12,'A1231231'),(15,'Ezequiel','Roldán',4300999,'2006-07-29',27,'A123123'),(16,'luisina','dalesio',44663351,'2024-07-18',12,'783278389'),(17,'luisina','dalesio',263782,'2000-07-18',42,''),(18,'luisina','dalesio',432423,'2024-07-19',43,'466364'),(19,'luisis','dsfml',43544,'1996-07-19',44,'28374'),(20,'ojdoqwf','wiojoq',9034809,'2009-07-17',45,'930490'),(21,'luisina','dae',44663351,'2007-07-19',47,'7242179');
 /*!40000 ALTER TABLE `pasajeros` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,12 +134,15 @@ CREATE TABLE `reservas` (
   `id` int NOT NULL AUTO_INCREMENT,
   `vuelo_id` int DEFAULT NULL,
   `precio` double DEFAULT NULL,
-  `estado` tinyint DEFAULT NULL,
+  `estado` varchar(40) DEFAULT NULL,
   `pasajeros` int DEFAULT NULL,
+  `usuarios_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `vuelo_reservas_idx` (`vuelo_id`),
+  KEY `vuelo_reservas_idx` (`vuelo_id`) /*!80000 INVISIBLE */,
+  KEY `usuario_reserva` (`usuarios_id`),
+  CONSTRAINT `usuario_reservas` FOREIGN KEY (`usuarios_id`) REFERENCES `usuarios` (`idusuarios`),
   CONSTRAINT `vuelo_reservas` FOREIGN KEY (`vuelo_id`) REFERENCES `vuelos` (`IDvuelo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -145,6 +151,7 @@ CREATE TABLE `reservas` (
 
 LOCK TABLES `reservas` WRITE;
 /*!40000 ALTER TABLE `reservas` DISABLE KEYS */;
+INSERT INTO `reservas` VALUES (1,18,3250,'Pendiente',8,NULL),(2,18,0,'Pendiente',0,NULL),(3,18,0,'Pendiente',0,NULL),(4,18,1500,'Pendiente',4,NULL),(5,18,1500,'Pendiente',4,NULL),(6,18,0,'Pendiente',0,NULL),(7,18,2000,'Pendiente',5,NULL),(8,18,0,'Pendiente',0,NULL),(9,18,1250,'Pendiente',3,NULL),(10,18,1000,'Pendiente',2,NULL),(11,18,1000,'Pendiente',2,NULL),(12,18,1000,'Pendiente',2,NULL),(13,18,1000,'Pendiente',2,NULL),(14,18,1000,'Pendiente',2,NULL),(15,18,1000,'Pendiente',3,NULL),(16,18,4500,'Pendiente',6,NULL),(17,18,4125,'Pendiente',6,NULL),(18,18,1500,'Pendiente',3,NULL),(19,18,2250,'Pendiente',3,NULL),(20,18,2250,'Pendiente',3,NULL),(21,18,0,'Pendiente',0,NULL),(22,18,1500,'Pendiente',2,NULL),(23,21,360000,'Pendiente',2,NULL),(24,18,0,'Pendiente',0,NULL),(25,18,1500,'Pendiente',2,NULL),(26,18,0,'Pendiente',0,NULL),(27,18,1500,'Pendiente',2,NULL),(28,18,0,'Pendiente',0,NULL),(29,18,1875,'Pendiente',3,NULL),(30,18,0,'Pendiente',0,NULL),(31,18,1875,'Pendiente',3,NULL),(32,19,0,'Pendiente',0,NULL),(33,19,375000,'Pendiente',3,NULL),(34,19,0,'Pendiente',0,NULL),(35,19,375000,'Pendiente',3,NULL),(36,20,0,'Pendiente',0,NULL),(37,20,562500,'Pendiente',6,NULL),(38,22,0,'Pendiente',0,NULL),(39,19,250000,'Pendiente',3,NULL),(40,23,225000,'Pendiente',2,NULL),(41,19,0,'Pendiente',0,NULL),(42,23,375000,'Pendiente',3,NULL),(43,18,1875,'Pendiente',3,NULL),(44,19,375000,'Pendiente',3,NULL),(45,19,375000,'Pendiente',3,NULL),(47,19,375000,'Pendiente',3,44663351);
 /*!40000 ALTER TABLE `reservas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -156,14 +163,14 @@ DROP TABLE IF EXISTS `usuarios`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usuarios` (
-  `idusuarios` int NOT NULL AUTO_INCREMENT,
+  `idusuarios` int NOT NULL,
   `nombre` varchar(45) NOT NULL,
   `apellido` varchar(45) NOT NULL,
   `correo` varchar(100) NOT NULL,
   `contrasenia` varchar(255) NOT NULL,
   PRIMARY KEY (`idusuarios`),
   UNIQUE KEY `correo_UNIQUE` (`correo`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -172,7 +179,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Luisina','Gomez','luisinagomez@gmail.com','violeta123'),(22,'luisina','as','griseldadalesio@gmail.com','luisina1'),(23,'liz','gonzalez','dg1255540@gmail.com','luisina1'),(24,'sad','sd','luisinagomez752@gmail.com','luisina1');
+INSERT INTO `usuarios` VALUES (1,'Luisina','Gomez','luisinagomez@gmail.com','violeta123'),(22,'luisina','as','griseldadalesio@gmail.com','luisina1'),(23,'liz','gonzalez','dg1255540@gmail.com','luisina1'),(44663351,'sad','sd','luisinagomez752@gmail.com','luisina1');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -197,7 +204,7 @@ CREATE TABLE `vuelos` (
   PRIMARY KEY (`IDvuelo`),
   KEY `Foranea_Vuelo_Avion_idx` (`Id_avion_vuelos`),
   CONSTRAINT `Foranea_Vuelo_Avion` FOREIGN KEY (`Id_avion_vuelos`) REFERENCES `avion` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -206,7 +213,7 @@ CREATE TABLE `vuelos` (
 
 LOCK TABLES `vuelos` WRITE;
 /*!40000 ALTER TABLE `vuelos` DISABLE KEYS */;
-INSERT INTO `vuelos` VALUES (13,'Buenos Aires','Cancún','15:00:00','A tiempo','2024-07-14','23:00:00','2024-07-14',1,100),(14,'Cancún','Buenos Aires','12:30:00','A tiempo','2024-07-14','19:00:00','2024-07-14',2,200),(15,'Buenos Aires','Miami','12:00:00','A tiempo','2024-07-13','09:00:00','2024-07-14',3,150),(16,'Buenos Aires','Miami','12:00:00','A tiempo','2024-07-11','12:00:00','2024-07-12',3,300),(17,'Buenos Aires','Rio de Janeiro','17:00:00','A tiempo','2024-07-17','12:00:00','2024-07-18',2,400),(18,'Buenos Aires','Miami','18:00:00',NULL,'2024-07-20','12:00:00','2024-07-21',1,500);
+INSERT INTO `vuelos` VALUES (13,'Buenos Aires','Cancún','15:00:00','A tiempo','2024-07-14','23:00:00','2024-07-14',1,100),(14,'Cancún','Buenos Aires','12:30:00','A tiempo','2024-07-14','19:00:00','2024-07-14',2,200),(15,'Buenos Aires','Miami','12:00:00','A tiempo','2024-07-13','09:00:00','2024-07-14',3,150),(16,'Buenos Aires','Miami','12:00:00','A tiempo','2024-07-11','12:00:00','2024-07-12',3,300),(17,'Buenos Aires','Rio de Janeiro','17:00:00','A tiempo','2024-07-17','12:00:00','2024-07-18',2,400),(18,'Buenos Aires','Miami','18:00:00',NULL,'2024-07-20','12:00:00','2024-07-21',1,500),(19,'Cancún','Buenos Aires','10:00:00',NULL,'2024-08-02','12:00:00','2024-08-04',3,100000),(20,'Buenos Aires','Rio de Janeiro','23:00:00',NULL,'2024-08-02','13:00:00','2024-08-03',2,75000),(21,'Buenos Aires','Miami','22:00:00',NULL,'2024-08-02','12:00:00','2024-08-04',1,120000),(22,'Buenos Aires','Rio de Janiero','12:00:00',NULL,'2024-08-01','11:00:00','2024-08-03',2,110000),(23,'Buenos Aires','Cancún','11:00:00',NULL,'2024-07-29','13:00:00','2024-08-01',1,100000);
 /*!40000 ALTER TABLE `vuelos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -245,4 +252,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-17 23:47:10
+-- Dump completed on 2024-07-19 19:06:45

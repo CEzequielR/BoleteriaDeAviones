@@ -132,6 +132,7 @@ public class SesionIniciada extends javax.swing.JFrame {
     private void gestionReservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gestionReservasActionPerformed
         dispose();
         GestionDeReservas gdr = new GestionDeReservas();
+        gdr.setExtendedState(JFrame.MAXIMIZED_BOTH);
         gdr.setVisible(true);
     }//GEN-LAST:event_gestionReservasActionPerformed
 

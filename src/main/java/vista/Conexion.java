@@ -1,21 +1,17 @@
-
 package vista;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author Monica Valenzuela
- */
+
 public class Conexion {
  
     Connection conectar = null;
     
     String usuario = "root";
-    String contrasenia = "root";
-    String bd = "vuelos";
+    String contrasenia = "admin";
+    String bd = "final";
     String ip = "localhost";
     String puerto = "3306";
     String cadena = "jdbc:mysql://"+ip+":"+puerto+"/"+bd;
@@ -31,5 +27,5 @@ public class Conexion {
             JOptionPane.showMessageDialog(null, "Error al conectarse a la base de datos, erorr: "+ e.toString());
         }
         return conectar;
-   }
+    }
 }
